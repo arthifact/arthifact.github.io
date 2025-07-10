@@ -86,8 +86,5 @@ description: Posts about the Astro static site generator.
 - Update styles in `src/styles/global.css` and Tailwind config.
 - Add or edit navigation links in `src/site.config.ts`.
 
-## Contributing
-Pull requests and issues are welcome! Please open an issue to discuss major changes first.
-
 ## License
 MIT
