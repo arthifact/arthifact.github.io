@@ -23,7 +23,7 @@ import { expressiveCodeOptions, siteConfig } from "./src/site.config";
 export default defineConfig({
 	site: siteConfig.url,
 	image: {
-		domains: ["arthifact.github.io"],
+		domains: ["arthifact.com"],
 	},
 	integrations: [
 		expressiveCode(expressiveCodeOptions),
