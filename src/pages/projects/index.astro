@@ -1,0 +1,27 @@
+---
+import { getCollection } from "astro:content";
+import ProjectPreview from "@/components/blog/ProjectPreview.astro";
+import PageLayout from "@/layouts/Base.astro";
+import { collectionDateSort } from "@/utils/date";
+
+const allProjects = await getCollection("project");
+const sortedProjects = allProjects.sort(collectionDateSort);
+
+const meta = {
+	title: "Projects",
+	description: "A collection of my projects.",
+};
+---
+
+<PageLayout meta={meta}>
+	<h1 class="title mb-6">Projects</h1>
+	<ul class="mt-6 space-y-6 text-start" role="list">
+		{
+			sortedProjects.map((p) => (
+				<li>
+					<ProjectPreview project={p} />
+				</li>
+			))
+		}
+	</ul>
+</PageLayout>

@@ -1,0 +1,49 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
+
+interface Props {
+	project: CollectionEntry<"project">;
+}
+
+const { project } = Astro.props;
+const { coverImage, title, description, publishDate } = project.data;
+---
+
+<div class="bg-global-text/5 flex min-h-[104px] w-full items-center gap-6 rounded-md px-4 py-3">
+	{
+		coverImage && (
+			<div class="flex aspect-[16/9] w-36 flex-shrink-0 items-center justify-center overflow-hidden rounded bg-zinc-100 dark:bg-zinc-800">
+				<Image
+					src={coverImage.src}
+					alt={coverImage.alt}
+					width={288}
+					height={162}
+					class="h-full w-full object-cover"
+					loading="lazy"
+				/>
+			</div>
+		)
+	}
+	<div class="flex min-w-0 flex-1 flex-col justify-center">
+		<a
+			class="prose prose-cactus cactus-link mb-2 block w-full truncate font-semibold text-black dark:!text-white"
+			href={`/projects/${project.id}/`}
+			title={title}
+		>
+			{title}
+		</a>
+		<p class="block w-full truncate" title={description}>{description}</p>
+		{
+			publishDate && (
+				<p class="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+					{new Date(publishDate).toLocaleDateString("en-GB", {
+						day: "numeric",
+						month: "short",
+						year: "numeric",
+					})}
+				</p>
+			)
+		}
+	</div>
+</div>
