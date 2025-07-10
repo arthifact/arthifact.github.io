@@ -1,6 +1,6 @@
 # Arthifact Website
 
-*(A fork from Astro Cactus by Chris Williams)*
+*(A fork and modification from Astro Cactus by Chris Williams)*
 
 Welcome to the codebase for [Arthifact](https://arthifact.com/) — a site for interactive systems, visual constructs, and neural logs. 
 
