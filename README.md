@@ -64,7 +64,7 @@ coverImage:
 title: "My Project"
 description: "A description of the project."
 topic: "" # Leave empty for projects
-tags: ["javascript"]
+tags: [] # Leave empty for projects
 publishDate: "01 Jan 2024"
 coverImage:
   src: "./cover.png"
