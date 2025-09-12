@@ -23,3 +23,13 @@ pnpm-debug.log*
 *.pem
 .cache
 .astro
+
+# IDE/editor folders
+.vscode/
+.idea/
+.history/
+
+# System files
+Thumbs.db
+ehthumbs.db
+.DS_Store
