@@ -23,6 +23,19 @@ pnpm-debug.log*
 *.pem
 .cache
 .astro
+.vscode/
+.idea/
+.history/
+Thumbs.db
+ehthumbs.db
+*.log
+.env.local
+.env.*.local
+.code-workspace
+arthifact_website.code-workspace
+.prettierrc.js
+.prettierignore
+biome.json
 
 # IDE/editor folders
 .vscode/
