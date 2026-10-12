@@ -1,59 +1,38 @@
 ---
+import { render } from "astro:content";
+import { pageContent, cvContent } from "@/data/pages";
+import identity from "../../content/site/index.json";
 import PageIntro from "@/components/PageIntro.astro";
 import PageLayout from "@/layouts/Base.astro";
+const page = await pageContent("about");
+const { Content } = await render(page);
+const cv = await cvContent();
 ---
 
-<PageLayout
-  meta={{
-    title: "About",
-    description:
-      "About Gabriel I. Alonso — research interests, creative work, CV, and links.",
-  }}
->
+<PageLayout meta={page.data}>
   <PageIntro
-    number="05"
-    title="About"
-    description="I’m Gabriel I. Alonso. I explore the connections between geometry, computation, and visual expression."
+    number={page.data.number!}
+    title={page.data.title}
+    description={page.data.intro!}
   />
   <div class="about-layout">
-    <div class="about-text">
-      <p>
-        My full name is Gabriel Isaac Alonso Serrato, and I also make things as <em
-          >Arthifact</em
-        >. My background brings together computer science and environmental
-        engineering; my research direction is geometry processing.
-      </p><p>
-        I’m interested in how geometric representations connect to simulation
-        and computer graphics. During the Summer Geometry Initiative in 2025, I
-        explored differentiable meshing and co-authored an <a
-          href="https://summergeometry.org/sgi2025/dmesh/">essay on DMesh++</a
-        >.
-      </p><p>
-        Alongside research, I build interactive systems and open-source tools,
-        and create 3D art and animation. This site collects that work, together
-        with the notes I make along the way.
-      </p>
-    </div>
+    <div class="about-text"><Content /></div>
     <aside class="about-sidebar" aria-label="CV and contact links">
-      <h2 class="eyebrow">Curriculum vitae</h2><ul>
+      <h2 class="eyebrow">{page.data.cvTitle}</h2><ul>
         <li>
-          <a href="/files/Gabriel_Isaac_Alonso_Serrato_CV.pdf"
-            >View CV (PDF)<span aria-hidden="true">↗</span></a>
+          <a href={cv.href}>{cv.label}<span aria-hidden="true">↗</span></a>
         </li>
-      </ul><h2 class="eyebrow">Find me elsewhere</h2><ul>
-        <li>
-          <a href="https://github.com/arthifact"
-            >GitHub<span aria-hidden="true">↗</span></a>
-        </li><li>
-          <a href="https://www.linkedin.com/in/gialonsoser/"
-            >LinkedIn<span aria-hidden="true">↗</span></a>
-        </li><li>
-          <a href="https://www.youtube.com/@arthifact"
-            >YouTube<span aria-hidden="true">↗</span></a>
-        </li><li>
-          <a href="https://www.instagram.com/arthifact_/"
-            >Instagram<span aria-hidden="true">↗</span></a>
-        </li>
+      </ul><h2 class="eyebrow">{page.data.socialTitle}</h2><ul>
+        {
+          identity.socials.map((link) => (
+            <li>
+              <a href={link.href}>
+                {link.label}
+                <span aria-hidden="true">↗</span>
+              </a>
+            </li>
+          ))
+        }
       </ul>
     </aside>
   </div>

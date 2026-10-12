@@ -1,14 +1,15 @@
 ---
+import identity from "../../../content/site/index.json";
 const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer" data-pagefind-ignore>
   <div>
-    <a href="/">Gabriel I. Alonso</a>
+    <a href="/">{identity.site.author}</a>
   </div>
   <div class="footer-links">
-    <a href="https://github.com/arthifact">GitHub ↗</a><a
-      href="https://www.linkedin.com/in/gialonsoser/">LinkedIn ↗</a
-    ><a href="/rss.xml">RSS ↗</a><span class="mono">© {year}</span>
+    {
+      identity.footerLinks.map((link) => <a href={link.href}>{link.label} ↗</a>)
+    }<span class="mono">© {year}</span>
   </div>
 </footer>

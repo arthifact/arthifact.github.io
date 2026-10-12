@@ -8,13 +8,14 @@ import expressiveCode from "astro-expressive-code";
 import icon from "astro-icon";
 import robotsTxt from "astro-robots-txt";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import rehypeExternalLinks from "rehype-external-links";
+import { rehypeArticleLinks } from "./src/plugins/rehype-article-links";
 import rehypeUnwrapImages from "rehype-unwrap-images";
 // Remark plugins
 import remarkDirective from "remark-directive"; /* Handle ::: directives as nodes */
 import remarkMath from "remark-math";
 import { remarkAdmonitions } from "./src/plugins/remark-admonitions"; /* Add admonitions */
 import { remarkGithubCard } from "./src/plugins/remark-github-card";
+import { remarkContentLinks } from "./src/plugins/remark-content-links";
 import { remarkReadingTime } from "./src/plugins/remark-reading-time";
 import { rehypeMath } from "./src/plugins/rehype-math";
 import { expressiveCodeOptions, siteConfig } from "./src/site.config";
@@ -22,6 +23,7 @@ import { expressiveCodeOptions, siteConfig } from "./src/site.config";
 // https://astro.build/config
 export default defineConfig({
   site: siteConfig.url,
+  prerenderConflictBehavior: "error",
   compressHTML: true,
   image: {
     domains: ["arthifact.com"],
@@ -47,17 +49,12 @@ export default defineConfig({
           rehypeAutolinkHeadings,
           { behavior: "wrap", properties: { className: ["not-prose"] } },
         ],
-        [
-          rehypeExternalLinks,
-          {
-            rel: ["noreferrer", "noopener"],
-            target: "_blank",
-          },
-        ],
+        rehypeArticleLinks,
         rehypeUnwrapImages,
       ],
       remarkPlugins: [
         remarkMath,
+        remarkContentLinks,
         remarkReadingTime,
         remarkDirective,
         remarkGithubCard,

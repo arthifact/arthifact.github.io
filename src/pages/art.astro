@@ -1,4 +1,5 @@
 ---
+import { pageContent } from "@/data/pages";
 import { getCollection } from "astro:content";
 import PageIntro from "@/components/PageIntro.astro";
 import WorkCard from "@/components/WorkCard.astro";
@@ -6,23 +7,17 @@ import PageLayout from "@/layouts/Base.astro";
 const projects = (
   await getCollection("project", ({ data }) => data.kind === "art")
 ).sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime());
+const { data: page } = await pageContent("art");
 ---
 
-<PageLayout
-  meta={{
-    title: "Art",
-    description:
-      "3D art and animation by Gabriel I. Alonso, also known as Arthifact.",
-  }}
->
+<PageLayout meta={page}>
   <PageIntro
-    number="03"
-    title="Art"
-    description="Stories told through form, color, and motion. A collection of 3D animation and visual experiments."
+    number={page.number!}
+    title={page.title}
+    description={page.intro!}
   />
   <div class="index-topline mono">
-    <span>Selected visual work</span><a
-      href="https://www.youtube.com/@arthifact">Motion on YouTube ↗</a>
+    <span>{page.topline}</span><a href={page.link!.href}>{page.link!.label}</a>
   </div>
   <div class="work-grid art-grid">
     {
@@ -32,8 +27,8 @@ const projects = (
     }
   </div>
   <div class="simple-note">
-    <p>More sketches and works in progress</p><a
-      class="text-link mono"
-      href="https://www.instagram.com/arthifact_/">Instagram ↗</a>
+    <p>{page.note}</p><a class="text-link mono" href={page.noteLink!.href}
+      >{page.noteLink!.label}</a
+    >
   </div>
 </PageLayout>

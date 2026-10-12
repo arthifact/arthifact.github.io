@@ -1,0 +1,83 @@
+{
+  "site": {
+    "author": "Gabriel I. Alonso",
+    "date": {
+      "locale": "en-GB",
+      "options": {
+        "day": "numeric",
+        "month": "short",
+        "year": "numeric"
+      }
+    },
+    "description": "Gabriel I. Alonso — geometry processing, interactive systems, and 3D art. Research writing, open-source projects, and visual experiments.",
+    "lang": "en-GB",
+    "ogLocale": "en_GB",
+    "title": "Gabriel I. Alonso",
+    "url": "https://arthifact.com/"
+  },
+  "navigation": [
+    {
+      "path": "/",
+      "title": "Home"
+    },
+    {
+      "path": "/research/",
+      "title": "Research"
+    },
+    {
+      "path": "/projects/",
+      "title": "Projects"
+    },
+    {
+      "path": "/art/",
+      "title": "Art"
+    },
+    {
+      "path": "/blog/",
+      "title": "Blog"
+    },
+    {
+      "path": "/about/",
+      "title": "About"
+    }
+  ],
+  "shortName": "G. I. Alonso",
+  "socials": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/arthifact",
+      "icon": "mdi:github"
+    },
+    {
+      "label": "LinkedIn",
+      "href": "https://www.linkedin.com/in/gialonsoser/",
+      "icon": "mdi:linkedin"
+    },
+    {
+      "label": "YouTube",
+      "href": "https://www.youtube.com/@arthifact",
+      "icon": "mdi:youtube"
+    },
+    {
+      "label": "Instagram",
+      "href": "https://www.instagram.com/arthifact_/",
+      "icon": "mdi:instagram"
+    }
+  ],
+  "footerLinks": [
+    {
+      "label": "GitHub",
+      "href": "https://github.com/arthifact",
+      "icon": "mdi:github"
+    },
+    {
+      "label": "LinkedIn",
+      "href": "https://www.linkedin.com/in/gialonsoser/",
+      "icon": "mdi:linkedin"
+    },
+    {
+      "label": "RSS",
+      "href": "/rss.xml"
+    }
+  ]
+}
