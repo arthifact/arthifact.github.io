@@ -11,9 +11,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
-VECTORS = ROOT / "content/blog/paper-example"
 CONTENT = ROOT / "content/blog/paper-example"
-VECTORS.mkdir(parents=True, exist_ok=True)
 CONTENT.mkdir(parents=True, exist_ok=True)
 plt.rcParams.update({
     "font.family": "STIXGeneral", "mathtext.fontset": "stix",
@@ -56,8 +54,7 @@ ax.scatter(x, y, s=25, facecolor="white", edgecolor=ORANGE, lw=1.2, label="Noisy
 ax.set(xlim=(0, 1), ylim=(-1.85, 1.85), xlabel="Position, x", ylabel="Signal amplitude")
 ax.legend(loc="upper center", ncol=3, frameon=False, fontsize=10, bbox_to_anchor=(0.5, 1.15), columnspacing=1.4)
 ax.grid(axis="y", color="#eeeeea", lw=0.6)
-fig.savefig(VECTORS / "reconstruction.svg", metadata={"Date": None})
-fig.savefig(CONTENT / "reconstruction.png", dpi=180)
+fig.savefig(CONTENT / "reconstruction.svg", metadata={"Date": None})
 plt.close(fig)
 
 fig, ax = plt.subplots(figsize=(5.0, 3.6), layout="constrained")
@@ -76,13 +73,12 @@ ax.axvline(selected, color=ORANGE, lw=1.1, ls="--", label=r"Shown fit: $\lambda=
 ax.set(xlabel=r"Regularization strength, $\lambda$", ylabel="Reconstruction RMSE")
 ax.legend(loc="upper right", frameon=False, fontsize=10)
 ax.grid(axis="y", color="#eeeeea", lw=0.6)
-fig.savefig(VECTORS / "regularization.svg", metadata={"Date": None})
-fig.savefig(CONTENT / "regularization.png", dpi=180)
+fig.savefig(CONTENT / "regularization.svg", metadata={"Date": None})
 plt.close(fig)
 
 results = {"seed": 7, "samples": len(x), "coefficients": A.shape[1], "noise_std": 0.12,
            "results": [{"lambda": lam, "rmse": round(error, 4)} for lam, error in zip(strengths, errors)]}
 (CONTENT / "results.json").write_text(json.dumps(results, indent=2) + "\n")
-for vector in VECTORS.glob("*.svg"):
+for vector in CONTENT.glob("*.svg"):
     vector.write_text("\n".join(line.rstrip() for line in vector.read_text().splitlines()) + "\n")
 print(json.dumps(results, indent=2))

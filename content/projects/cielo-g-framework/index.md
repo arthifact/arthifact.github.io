@@ -2,16 +2,10 @@
 featured: true
 title: "CIELO-G Learning Framework"
 description: "An open-source modular gamification framework for Godot 4 that enables rapid creation of educational mini-games with built-in progress tracking and certificate generation."
-topic: ""
 publishDate: "28 Aug 2025"
-updatedDate: ""
 coverImage:
   src: "./cover.png"
   alt: "CIELO-G Learning Framework cover"
-thumbnail:
-  src: "./cover.png"
-  alt: "CIELO-G Learning Framework thumbnail"
-tags: []
 ---
 
 ## Overview

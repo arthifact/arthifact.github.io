@@ -32,7 +32,6 @@ const post = defineCollection({
   schema: ({ image }) =>
     baseSchema.extend({
       description: z.string(),
-      topic: z.string().optional().default(""),
       coverImage: z
         .object({
           alt: z.string(),
@@ -79,14 +78,7 @@ const project = defineCollection({
       description: z.string(),
       kind: z.enum(["research", "project", "art"]).default("project"),
       featured: z.boolean().default(false),
-      topic: z.string().optional().default(""),
       coverImage: z
-        .object({
-          alt: z.string(),
-          src: image(),
-        })
-        .optional(),
-      thumbnail: z
         .object({
           alt: z.string(),
           src: image(),
@@ -100,7 +92,6 @@ const project = defineCollection({
         .string()
         .optional()
         .transform((str) => (str ? new Date(str) : undefined)),
-      tags: z.array(z.string()).default([]),
     }),
 });
 

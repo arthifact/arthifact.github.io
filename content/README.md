@@ -53,7 +53,7 @@ Markdown images are optimized automatically. Use Markdown links such as `./paper
 
 ## Write a post or note
 
-Posts go in `blog/my-post/index.md` (or `.mdx`) with `title`, `description`, and `publishDate`. Optional fields include `tags`, `coverImage`, and `draft: true`. Draft posts and their attachment folders are omitted from production. `unlisted: true` keeps a post publicly accessible at its URL, but excludes it from Blog, RSS, and search. Work in Research, Projects, and Art is public as soon as it is added.
+Posts go in `blog/my-post/index.md` (or `.mdx`) with `title`, `description`, and `publishDate`. Optional fields include `tags`, `coverImage`, and `draft: true`. Draft posts and their attachment folders are omitted from production. `unlisted: true` keeps a post publicly accessible at its URL, but excludes it from Blog and RSS and adds noindex metadata. Work in Research, Projects, and Art is public as soon as it is added.
 
 Notes go in `notes/my-note/index.md`. Use a full date with a timezone, such as `publishDate: "2026-10-12T12:00:00-06:00"`. Blog and RSS automatically collect posts, research essays, and notes. The existing unlisted paper and Markdown examples remain available.
 

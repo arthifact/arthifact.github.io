@@ -2,16 +2,10 @@
 featured: true
 title: "LEGO-Style UTEP Animation"
 description: "A playful LEGO-inspired 3D animation created in Blender for the UTEP Geology Department’s TCM Day celebration."
-topic: ""
 publishDate: "13 Mar 2025"
-updatedDate: ""
 coverImage:
   src: "./cover.png"
   alt: "LEGO-style dinosaur animation cover"
-thumbnail:
-  src: "./cover.png"
-  alt: "LEGO-style dinosaur thumbnail"
-tags: []
 ---
 
 ## Overview  
