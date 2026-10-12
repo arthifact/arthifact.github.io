@@ -3,7 +3,7 @@ import { rehypeHeadingIds, unified } from "@astrojs/markdown-remark";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import tailwind from "@tailwindcss/vite";
-import { defineConfig, envField } from "astro/config";
+import { defineConfig } from "astro/config";
 import expressiveCode from "astro-expressive-code";
 import icon from "astro-icon";
 import robotsTxt from "astro-robots-txt";
@@ -16,7 +16,6 @@ import remarkMath from "remark-math";
 import { remarkAdmonitions } from "./src/plugins/remark-admonitions"; /* Add admonitions */
 import { remarkGithubCard } from "./src/plugins/remark-github-card";
 import { remarkContentLinks } from "./src/plugins/remark-content-links";
-import { remarkReadingTime } from "./src/plugins/remark-reading-time";
 import { rehypeMath } from "./src/plugins/rehype-math";
 import { expressiveCodeOptions, siteConfig } from "./src/site.config";
 
@@ -55,7 +54,6 @@ export default defineConfig({
       remarkPlugins: [
         remarkMath,
         remarkContentLinks,
-        remarkReadingTime,
         remarkDirective,
         remarkGithubCard,
         remarkAdmonitions,
@@ -74,24 +72,5 @@ export default defineConfig({
       exclude: ["@resvg/resvg-js"],
     },
     plugins: [tailwind()],
-  },
-  env: {
-    schema: {
-      WEBMENTION_API_KEY: envField.string({
-        context: "server",
-        access: "secret",
-        optional: true,
-      }),
-      WEBMENTION_URL: envField.string({
-        context: "client",
-        access: "public",
-        optional: true,
-      }),
-      WEBMENTION_PINGBACK: envField.string({
-        context: "client",
-        access: "public",
-        optional: true,
-      }),
-    },
   },
 });

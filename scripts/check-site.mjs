@@ -158,9 +158,8 @@ const example = fs.readFileSync(
   "utf8",
 );
 check(
-  example.includes('content="noindex, follow"') &&
-    example.includes("data-pagefind-ignore"),
-  "Paper example must remain unlisted and excluded from search.",
+  example.includes('content="noindex, follow"'),
+  "Paper example must retain its noindex metadata.",
 );
 check(
   (example.match(/class="section-number"/g) || []).length === 5,

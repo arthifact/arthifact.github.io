@@ -16,7 +16,7 @@ npm run verify:site
 npm run preview
 ```
 
-`npm run build` refreshes the content cache, builds the Pagefind index, and verifies the generated site. The homepage uses one small inline script to choose a Ponyo still; navigation and content also work with JavaScript disabled. The other core pages ship no client JavaScript. Index pages use system fonts; articles use locally hosted STIX Two Text. There are no external font requests or video players on initial load. The interactive Earth model loads its third-party viewer only after the reader requests it.
+`npm run build` refreshes the content cache and verifies the generated site. The homepage uses one small inline script to choose a Ponyo still; navigation and content also work with JavaScript disabled. The other core pages ship no client JavaScript. Index pages use system fonts; articles use locally hosted STIX Two Text. There are no external font requests or video players on initial load. The interactive Earth model loads its third-party viewer only after the reader requests it.
 
 The verification command checks every built page for broken local links and anchors, image dimensions, a main heading, the CV, RSS content, and a 24 KiB gzipped HTML budget for the core pages. Gallery checks also exercise all 50 choices, repeat avoidance, unavailable session storage, and fallback behavior. GitHub Actions runs type checks, the production build, and verification on pull requests.
 
@@ -37,7 +37,7 @@ Each section's own `index.md` contains its introduction. Existing website addres
 
 Add Markdown posts in `content/blog/` with `title`, `description`, and `publishDate`; optional fields include `tags`, `coverImage`, and `draft`. Notes live in `content/notes/`. The Blog and main RSS feed collect published posts, research essays, and notes. A post marked `unlisted: true` keeps its URL but stays out of the blog and feed and receives `noindex` metadata. The original Markdown demo is preserved this way.
 
-See the live [paper example](https://arthifact.com/posts/paper-example/), also linked at the top of Blog. It uses synthetic data to demonstrate the layout; it is unlisted, excluded from search and RSS, and is not a research entry. The optional figure generation script uses Python, NumPy, and Matplotlib; these are not site build dependencies.
+See the live [paper example](https://arthifact.com/posts/paper-example/), also linked at the top of Blog. It uses synthetic data to demonstrate the layout; it is unlisted, marked noindex and excluded from RSS, and is not a research entry. The optional figure generation script uses Python, NumPy, and Matplotlib; these are not site build dependencies.
 
 Research writeups, projects, art, posts, and notes use white paper sheets with STIX Two Text, a centered title and author line, an abstract, numbered sections, and fine rules. Each page reads down the left column, then continues from the top of the right. Headings, paragraphs, equations, tables, code, and footnotes share that continuous flow; headings never restart column pairs. A quiet gutter separates the columns. Wide figures can span the sheet above or below its text. Type, margins, and spacing scale smoothly with the sheet width using CSS container units and rem limits, with no layout JavaScript. Phones use one reading column. Covers remain thumbnails on index pages; insert article figures where they belong. Print styles remove navigation, shadows, and borders and respect authored page breaks.
 

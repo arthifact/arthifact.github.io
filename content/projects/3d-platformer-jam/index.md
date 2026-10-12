@@ -2,16 +2,10 @@
 featured: false
 title: "3D Platformer (Bandit Game Jam)"
 description: "A 3D platformer made in Godot for the Bandit Game Jam at UTEP, featuring custom mechanics, original characters, and five handcrafted levels."
-topic: ""
 publishDate: "13 February 2024"
-updatedDate: ""
 coverImage:
   src: "./cover.png"
   alt: "3D platformer cover"
-thumbnail:
-  src: "./cover.png"
-  alt: "3D platformer thumbnail"
-tags: []
 ---
 
 ## Overview  
