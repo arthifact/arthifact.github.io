@@ -11,8 +11,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
-VECTORS = ROOT / "public/images/paper-example"
-CONTENT = ROOT / "src/content/post/paper-example"
+VECTORS = ROOT / "content/blog/paper-example"
+CONTENT = ROOT / "content/blog/paper-example"
 VECTORS.mkdir(parents=True, exist_ok=True)
 CONTENT.mkdir(parents=True, exist_ok=True)
 plt.rcParams.update({

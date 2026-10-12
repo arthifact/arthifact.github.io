@@ -1,5 +1,8 @@
 ---
 import { getEntry } from "astro:content";
+import { cvContent } from "@/data/pages";
+import identity from "../../../content/site/index.json";
+const cv = await cvContent();
 import Logo from "@/components/Logo.astro";
 import { menuLinks } from "@/site.config";
 const pathname = Astro.url.pathname;
@@ -21,11 +24,16 @@ const isCurrent = (path: string) =>
 ---
 
 <header class="site-header" data-pagefind-ignore>
-  <a class="wordmark" href="/" aria-label="Gabriel I. Alonso — home">
+  <a class="wordmark" href="/" aria-label={`${identity.site.author} — home`}>
     <Logo class="wordmark-symbol" />
     {
       pathname !== "/" && (
-        <span>G. I. Alonso<span class="wordmark-dot" aria-hidden="true">.</span></span>
+        <span>
+          {identity.shortName}
+          <span class="wordmark-dot" aria-hidden="true">
+            .
+          </span>
+        </span>
       )
     }
   </a>
@@ -41,7 +49,10 @@ const isCurrent = (path: string) =>
       ))
     }
   </nav>
-  <a class="header-cv mono" href="/files/Gabriel_Isaac_Alonso_Serrato_CV.pdf"
-    >CV <span aria-hidden="true">↗</span><span class="sr-only"> (PDF)</span></a
+  <a class="header-cv mono" href={cv.href}
+    >{cv.navLabel}
+    <span aria-hidden="true">↗</span><span class="sr-only">
+      ({cv.format})</span
+    ></a
   >
 </header>

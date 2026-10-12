@@ -1,4 +1,5 @@
 ---
+import { pageContent } from "@/data/pages";
 import { getCollection } from "astro:content";
 import PageIntro from "@/components/PageIntro.astro";
 import WorkCard from "@/components/WorkCard.astro";
@@ -10,23 +11,19 @@ const projects = (
     Number(b.data.featured) - Number(a.data.featured) ||
     b.data.publishDate.getTime() - a.data.publishDate.getTime(),
 );
+const { data: page } = await pageContent("projects");
 ---
 
-<PageLayout
-  meta={{
-    title: "Projects",
-    description:
-      "Open-source tools, interactive systems, and graphics experiments by Gabriel I. Alonso.",
-  }}
->
+<PageLayout meta={page}>
   <PageIntro
-    number="02"
-    title="Projects"
-    description="Tools, interactive systems, and experiments. From mathematical visualization to playful worlds."
+    number={page.number!}
+    title={page.title}
+    description={page.intro!}
   />
   <div class="index-topline mono">
-    <span>{String(projects.length).padStart(2, "0")} projects</span><a
-      href="https://github.com/arthifact">Code on GitHub ↗</a>
+    <span>{String(projects.length).padStart(2, "0")} {page.countLabel}</span><a
+      href={page.link!.href}>{page.link!.label}</a
+    >
   </div>
   <div class="work-grid">
     {

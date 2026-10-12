@@ -56,7 +56,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96">
 ${faces.map((face) => `    <polygon points="${face.points}"/>`).join("\n")}
   </g>
 </svg>\n`;
-fs.writeFileSync(new URL("../public/logo.svg", import.meta.url), svg);
+fs.writeFileSync(new URL("../content/site/logo.svg", import.meta.url), svg);
 const png = new Resvg(svg, {
   fitTo: { mode: "width", value: 540 },
   background: "#faf9f6",
@@ -67,6 +67,6 @@ await sharp(png)
   .resize(180, 180)
   .png({ palette: true })
   .toFile(
-    new URL("../public/icons/apple-touch-icon.png", import.meta.url).pathname,
+    new URL("../content/site/icons/apple-touch-icon.png", import.meta.url).pathname,
   );
 console.log("Generated the torus SVG and matching home-screen icon.");

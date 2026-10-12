@@ -1,68 +1,32 @@
 ---
+import { pageContent } from "@/data/pages";
 import { getCollection } from "astro:content";
 import OceanStill from "@/components/OceanStill.astro";
 import WorkCard from "@/components/WorkCard.astro";
 import PageLayout from "@/layouts/Base.astro";
 
 const projects = await getCollection("project");
-const selected = [
-  {
-    id: "article-exploring-dmesh",
-    title: "DMesh++",
-    description: "Differentiable meshing.",
-  },
-  {
-    id: "cielo-g-framework",
-    title: "CIELO-G",
-    description: "Learning framework for Godot.",
-  },
-  {
-    id: "lego-utep-dino-animation",
-    title: "LEGO animation",
-    description: "UTEP · Blender.",
-  },
-  {
-    id: "graph-explorer",
-    title: "Graph Explorer",
-    description: "Interactive functions in Unity.",
-  },
-  {
-    id: "unreal-voxel-character",
-    title: "Voxel character",
-    description: "Unreal Engine · interaction.",
-  },
-  {
-    id: "behavioral-deplasticization-animation",
-    title: "Deplasticization",
-    description: "A short film in Spline.",
-  },
-].map(({ id, ...copy }) => {
+const { data: home } = await pageContent("home");
+const selected = home.selected!.map(({ id, ...copy }) => {
   const project = projects.find((entry) => entry.id === id);
   if (!project) throw new Error(`Selected work is missing: ${id}`);
   return { project, ...copy };
 });
 ---
 
-<PageLayout
-  meta={{
-    title: "Portfolio",
-    description:
-      "Gabriel I. Alonso — environmental engineering graduate student. Research, projects, art, and writing.",
-  }}
-  showFooter={false}
->
+<PageLayout meta={home} showFooter={false}>
   <div class="home-intro">
     <div class="home-identity">
-      <h1>Gabriel I. Alonso<span class="accent-dot">.</span></h1>
-      <p>Environmental engineering graduate student</p>
+      <h1>{home.name}<span class="accent-dot">.</span></h1>
+      <p>{home.role}</p>
       <p class="home-contact">
-        <a href="mailto:gialonsoser@gmail.com">gialonsoser@gmail.com</a>
+        <a href={`mailto:${home.email}`}>{home.email}</a>
       </p>
     </div>
     <OceanStill />
   </div>
   <section class="selected-section" aria-labelledby="selected-title">
-    <h2 id="selected-title" class="eyebrow">Selected work</h2>
+    <h2 id="selected-title" class="eyebrow">{home.selectedTitle}</h2>
     <div class="selected-grid">
       {
         selected.map(({ project, title, description }, index) => (

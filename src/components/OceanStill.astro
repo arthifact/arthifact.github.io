@@ -1,9 +1,12 @@
 ---
 import type { ImageMetadata } from "astro";
 import { getImage } from "astro:assets";
-import { ponyoDescriptions } from "@/data/ponyo";
+import descriptions from "../../content/home/ponyo/descriptions.json";
+import { pageContent } from "@/data/pages";
+const ponyoDescriptions: Record<string, string> = descriptions;
+const { data: home } = await pageContent("home");
 
-const images = import.meta.glob<ImageMetadata>("/src/assets/ponyo/*.webp", {
+const images = import.meta.glob<ImageMetadata>("/content/home/ponyo/*.webp", {
   eager: true,
   import: "default",
 });
@@ -93,10 +96,8 @@ if (frames.length !== 50 || !fallback)
     />
   </noscript>
   <figcaption>
-    <a
-      href="https://www.ghibli.jp/works/ponyo/"
-      title="© 2008 Hayao Miyazaki/Studio Ghibli, NDHDMT"
-      >Ponyo, 2008 · © Studio Ghibli</a
+    <a href={home.artwork!.href} title={home.artwork!.copyright}
+      >{home.artwork!.label}</a
     >
   </figcaption>
 </figure>

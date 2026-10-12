@@ -1,6 +1,8 @@
 import { defineCollection } from "astro:content";
 import { z } from "astro/zod";
 import { glob } from "astro/loaders";
+import { workLoader } from "./data/work-loader";
+import content from "../content/site/index.json";
 
 function removeDupsAndLowerCase(array: string[]) {
   return [...new Set(array.map((str) => str.toLowerCase()))];
@@ -10,7 +12,7 @@ const titleSchema = z.string().max(180);
 
 const baseSchema = z.object({
   title: titleSchema,
-  authors: z.array(z.string()).min(1).default(["Gabriel I. Alonso"]),
+  authors: z.array(z.string()).min(1).default([content.site.author]),
   format: z.enum(["article", "paper"]).default("article"),
   columns: z.union([z.literal(1), z.literal(2)]).default(2),
   abstract: z.string().optional(),
@@ -18,12 +20,15 @@ const baseSchema = z.object({
   numberedSections: z.boolean().default(false),
   pdf: z
     .string()
-    .regex(/^(\/(?!\/)|https:\/\/)/, "Use a local PDF path or an HTTPS URL.")
+    .regex(
+      /^(\.\/|\/(?!\/)|https:\/\/)/,
+      "Use ./paper.pdf, a site path, or an HTTPS URL.",
+    )
     .optional(),
 });
 
 const post = defineCollection({
-  loader: glob({ base: "./src/content/post", pattern: "**/*.{md,mdx}" }),
+  loader: glob({ base: "./content/blog", pattern: "*/**/index.{md,mdx}" }),
   schema: ({ image }) =>
     baseSchema.extend({
       description: z.string(),
@@ -50,7 +55,7 @@ const post = defineCollection({
 });
 
 const note = defineCollection({
-  loader: glob({ base: "./src/content/note", pattern: "**/*.{md,mdx}" }),
+  loader: glob({ base: "./content/notes", pattern: "**/*.{md,mdx}" }),
   schema: baseSchema.extend({
     description: z.string().optional(),
     publishDate: z.iso
@@ -60,7 +65,7 @@ const note = defineCollection({
 });
 
 const tag = defineCollection({
-  loader: glob({ base: "./src/content/tag", pattern: "**/*.{md,mdx}" }),
+  loader: glob({ base: "./content/tags", pattern: "**/*.{md,mdx}" }),
   schema: z.object({
     title: titleSchema.optional(),
     description: z.string().optional(),
@@ -68,7 +73,7 @@ const tag = defineCollection({
 });
 
 const project = defineCollection({
-  loader: glob({ base: "./src/content/projects", pattern: "**/*.{md,mdx}" }),
+  loader: workLoader(),
   schema: ({ image }) =>
     baseSchema.extend({
       description: z.string(),
@@ -99,4 +104,46 @@ const project = defineCollection({
     }),
 });
 
-export const collections = { post, note, tag, project };
+const link = z.object({ label: z.string(), href: z.string() });
+const page = defineCollection({
+  loader: glob({
+    base: "./content",
+    pattern: "{home,about,projects,research,art,blog,cv}/index.md",
+  }),
+  schema: z.object({
+    title: titleSchema,
+    description: z.string().default(content.site.description),
+    number: z.string().optional(),
+    intro: z.string().optional(),
+    name: z.string().optional(),
+    role: z.string().optional(),
+    email: z.string().optional(),
+    selectedTitle: z.string().optional(),
+    selected: z
+      .array(
+        z.object({
+          id: z.string(),
+          title: z.string(),
+          description: z.string(),
+        }),
+      )
+      .optional(),
+    artwork: z
+      .object({ label: z.string(), href: z.string(), copyright: z.string() })
+      .optional(),
+    topline: z.string().optional(),
+    countLabel: z.string().optional(),
+    link: link.optional(),
+    links: z.array(link).optional(),
+    note: z.string().optional(),
+    noteLink: link.optional(),
+    cvTitle: z.string().optional(),
+    socialTitle: z.string().optional(),
+    download: z.string().optional(),
+    label: z.string().optional(),
+    navLabel: z.string().optional(),
+    format: z.string().optional(),
+  }),
+});
+
+export const collections = { post, note, tag, project, page };

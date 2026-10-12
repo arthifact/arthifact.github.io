@@ -20,38 +20,28 @@ npm run preview
 
 The verification command checks every built page for broken local links and anchors, image dimensions, a main heading, the CV, RSS content, and a 24 KiB gzipped HTML budget for the core pages. Gallery checks also exercise all 50 choices, repeat avoidance, unavailable session storage, and fallback behavior. GitHub Actions runs type checks, the production build, and verification on pull requests.
 
-## Add and organize work
+## Everyday editing
 
-Existing project URLs stay under `/projects/<slug>/`, including entries shown in Research or Art. Each item has its own Markdown folder in `src/content/projects/` and a local cover image.
+All editable content lives in the root [`content/`](content/) folder. Start with the [editing guide](content/README.md).
 
-```yaml
----
-title: "Your project title"
-description: "A concise description of the work."
-kind: project # research | project | art
-featured: false
-publishDate: "2026-10-05"
-coverImage:
-  src: "./cover.png"
-  alt: "Describe what the image shows."
----
-```
+- `content/projects/`, `content/research/`, `content/art/`: one folder per work, with its Markdown, images, and attachments together. The folder determines the section automatically.
+- `content/blog/`, `content/notes/`: posts and notes, also with nearby files.
+- `content/home/index.md`: introduction, contact information, and selected work.
+- `content/about/index.md`: biography.
+- `content/cv/`: CV and its link labels.
+- `content/site/`: metadata, navigation, social links, branding, and compatibility URLs.
 
-- `kind` places the item in Research, Projects, or Art.
-- `featured: true` puts an item first in the project index.
-- Edit the `selected` entries in `src/pages/index.astro` to change the six homepage selections and their short display titles and descriptions. Astro normalizes IDs: the DMesh++ folder becomes `article-exploring-dmesh`.
-- Keep covers local. Astro produces responsive WebP images automatically.
-- Link to demonstrations and videos from the Markdown. Repository directives such as `::github{repo="arthifact/example"}` render static links.
+Each section's own `index.md` contains its introduction. Existing website addresses, including `/projects/<slug>/` for research and art, remain unchanged. Design and rendering stay in `src/`; ordinary content updates need no code changes.
 
 ## Write
 
-Add Markdown posts in `src/content/post/` with `title`, `description`, and `publishDate`; optional fields include `tags`, `coverImage`, and `draft`. Notes live in `src/content/note/`. The Blog and main RSS feed collect published posts, research essays, and notes. A post marked `unlisted: true` keeps its URL but stays out of the blog and feed and receives `noindex` metadata. The original Markdown demo is preserved this way.
+Add Markdown posts in `content/blog/` with `title`, `description`, and `publishDate`; optional fields include `tags`, `coverImage`, and `draft`. Notes live in `content/notes/`. The Blog and main RSS feed collect published posts, research essays, and notes. A post marked `unlisted: true` keeps its URL but stays out of the blog and feed and receives `noindex` metadata. The original Markdown demo is preserved this way.
 
 See the live [paper example](https://arthifact.com/posts/paper-example/), also linked at the top of Blog. It uses synthetic data to demonstrate the layout; it is unlisted, excluded from search and RSS, and is not a research entry. The optional figure generation script uses Python, NumPy, and Matplotlib; these are not site build dependencies.
 
 Research writeups, projects, art, posts, and notes use white paper sheets with STIX Two Text, a centered title and author line, an abstract, numbered sections, and fine rules. Each page reads down the left column, then continues from the top of the right. Headings, paragraphs, equations, tables, code, and footnotes share that continuous flow; headings never restart column pairs. A quiet gutter separates the columns. Wide figures can span the sheet above or below its text. Type, margins, and spacing scale smoothly with the sheet width using CSS container units and rem limits, with no layout JavaScript. Phones use one reading column. Covers remain thumbnails on index pages; insert article figures where they belong. Print styles remove navigation, shadows, and borders and respect authored page breaks.
 
-Start from `examples/paper.md` for plain text, math, and tables, or `examples/paper.mdx` for captioned figures and paired panels. Copy it into `src/content/post/<slug>/index.md` (or `.mdx`), set the title, summary, and date, and write the body. Remove `unlisted: true` when you want it in the blog and RSS. For a project, use `src/content/projects/<slug>/index.mdx` with `kind: research`, `project`, or `art`. Authors default to Gabriel I. Alonso; add an `authors` array for coauthors.
+Start from `content/templates/paper.md` for plain text, math, and tables, or `content/templates/paper.mdx` for captioned figures and paired panels. Copy it into `content/blog/<slug>/index.md` (or `.mdx`), set the title, summary, and date, and write the body. Remove `unlisted: true` when you want it in the blog and RSS. For a project, use `content/projects/<slug>/index.mdx` (or use `content/research/` or `content/art/`). Authors default to Gabriel I. Alonso; add an `authors` array for coauthors.
 
 Optional frontmatter:
 
@@ -62,16 +52,16 @@ numberedSections: true
 columns: 2 # The default paper layout; use 1 for a single reading column.
 authors: ["Gabriel I. Alonso", "Coauthor"]
 affiliation: "Your institution"
-pdf: "/files/your-paper.pdf"
+pdf: "./your-paper.pdf"
 ```
 
-`abstract` replaces the description with a manuscript abstract below the title. `columns` defaults to 2 for a continuous paper flow, down the left column and back to the top of the right; 1 remains available for a single reading column. `numberedSections` numbers level-two headings while preserving their anchors; footnotes are not numbered as a section. `pdf` adds a download link: place a PDF in `public/files/` or use an HTTPS URL. Existing PDF papers can accompany the readable HTML article.
+`abstract` replaces the description with a manuscript abstract below the title. `columns` defaults to 2 for a continuous paper flow, down the left column and back to the top of the right; 1 remains available for a single reading column. `numberedSections` numbers level-two headings while preserving their anchors; footnotes are not numbered as a section. `pdf` adds a download link: place a PDF beside the article and use `./your-paper.pdf` or use an HTTPS URL. Existing PDF papers can accompany the readable HTML article.
 
 Short pieces use one sheet by default. To start another sheet in MDX, import `PageBreak` from `@/components/paper/PageBreak.astro` and insert `<PageBreak />` on its own line between sections. Plain Markdown uses `<div data-paper-break></div>` on its own line. Page numbers are automatic, and section numbers, equation anchors, and footnotes continue through the document. Each sheet ends naturally after its content and bottom margin, so short articles have no forced empty page area. Content is never clipped or shrunk to fit. Breaks are chosen by the author rather than measured by browser JavaScript.
 
 In MDX, import `Figure`, `FigureGrid`, `Table`, and `Block` from `@/components/paper/`. Figures, tables, and ordinary Markdown images use one column by default. Add `wide` to a component to span both columns, like a LaTeX `figure*` or `table*`. A wide block floats to the top of its authored sheet, or to the bottom with `placement="bottom"`; it never inserts another column pair in the middle of the text. Float placement stays within the author’s page breaks. The HTML reading and keyboard order follows that displayed placement.
 
-For a local raster image, import it from the article folder and pass it as `src`; Astro generates responsive WebP variants. SVG plots use a local `/images/...svg` path with explicit `width` and `height`. Always supply meaningful `alt` text. `Figure` takes `id`, `number`, and either `caption` or a rich Markdown caption in its body. Images retain their proportions and stay together with their captions. Clicking a figure opens the original at full size. Two figures inside `<FigureGrid>` form equal-width panels aligned with the text columns. Image groups stack on phones. Use `maxWidth={640}` to center a smaller wide figure. The optional `sizes` prop refines responsive raster selection for custom placements.
+For a local raster image, import it from the article folder and pass it as `src`; Astro generates responsive WebP variants. Import SVG plots with `?url` from the article folder and supply explicit `width` and `height`. Always supply meaningful `alt` text. `Figure` takes `id`, `number`, and either `caption` or a rich Markdown caption in its body. Images retain their proportions and stay together with their captions. Clicking a figure opens the original at full size. Two figures inside `<FigureGrid>` form equal-width panels aligned with the text columns. Image groups stack on phones. Use `maxWidth={640}` to center a smaller wide figure. The optional `sizes` prop refines responsive raster selection for custom placements.
 
 Use `<Block>` around a short heading, introduction, and code listing to keep them together in one column. `<Block wide>` gives a long listing or equation both columns; `placement="bottom"` puts it below the text. Code lines wrap by default while preserving indentation and copyable source; use `wrap=false` in a fence’s metadata when line structure requires scrolling. Use LaTeX `aligned` or `split` for long equations, as in a typeset paper. Equation numbers reserve their own space. An unusually long unbroken formula or table scrolls within its own labelled region rather than covering the adjacent column. Native HTML layout does not reproduce TeX’s full automatic pagination: authors still choose page breaks, wide blocks, and mathematical line breaks.
 
@@ -81,14 +71,15 @@ LaTeX equations work in both `.md` and `.mdx`: use `$x^2$` inline or `$$` on sep
 
 ## Update identity and design
 
-- Name, description, domain, and navigation: `src/site.config.ts`.
-- Homepage role and email: `src/pages/index.astro`.
-- Biography and contact links: `src/pages/about.astro`.
-- CV: replace `public/files/Gabriel_Isaac_Alonso_Serrato_CV.pdf` when needed.
-- Site design: `src/styles/global.css`. Article typography, figures, tables, mobile layout, and print styles: `src/styles/paper.css`.
-- Sea artwork: `src/components/OceanStill.astro` and `src/assets/ponyo/`. All 50 stills are local, optimized WebP files. A small inline script picks one per homepage load, avoiding the previous frame in the same tab when session storage is available. Only the chosen image is requested; frame 050 is the no-JavaScript and image-error fallback. Image descriptions live in `src/data/ponyo.ts`.
-- Torus logo and SVG favicon: `public/logo.svg`, used in the header through `src/components/Logo.astro`. The homepage header shows only the logo; the full name appears once in the introduction. Other pages retain the logo and short name in the header. Regenerate the projected torus mesh and matching `public/icons/apple-touch-icon.png` with `node scripts/generate-logo.mjs`.
-- Social preview: `public/social-card.png`.
+- Site name, metadata, navigation, and social links: `content/site/index.json`.
+- Homepage introduction and selected work: `content/home/index.md`.
+- Biography: `content/about/index.md`.
+- CV: replace `content/cv/Gabriel_Isaac_Alonso_Serrato_CV.pdf`.
+- Site design: `src/styles/global.css`. Article typography and print styles: `src/styles/paper.css`.
+- Homepage stills: `content/home/ponyo/`; descriptions: `content/home/ponyo/descriptions.json`; credit: `content/home/index.md`. The existing random selection, repeat avoidance, and fallback behavior remain in `src/components/OceanStill.astro`.
+- Logo and icons: `content/site/logo.svg` and `content/site/icons/`. Regenerate them with `node scripts/generate-logo.mjs`.
+- Social preview: `content/site/social-card.png`.
+- Legacy public URLs: `content/site/asset-aliases.json`. Files are served from their new content locations at the original addresses.
 
 ## Artwork credit
 
