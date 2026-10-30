@@ -16,7 +16,7 @@ const {
   project,
   index,
   title = project.data.title,
-  description = project.data.description,
+  description = project.data.summary ?? project.data.description,
   loading = "lazy",
   priority = false,
   imageSizes = "(max-width: 470px) 100vw, (max-width: 760px) 50vw, 33vw",
@@ -28,14 +28,11 @@ const Heading = headingLevel === 2 ? "h2" : "h3";
 ---
 
 <article class="work-card">
-  <a
+  <div
     class:list={[
       "work-image",
       { "work-image-contain": imageFit === "contain" },
     ]}
-    href={`/projects/${project.id}/`}
-    tabindex="-1"
-    aria-hidden="true"
   >
     {
       coverImage && (
@@ -54,7 +51,7 @@ const Heading = headingLevel === 2 ? "h2" : "h3";
         />
       )
     }
-  </a>
+  </div>
   <div class="work-copy">
     <p class="eyebrow">
       <span
@@ -72,9 +69,7 @@ const Heading = headingLevel === 2 ? "h2" : "h3";
       >
     </p>
     <Heading class="work-title">
-      <a href={`/projects/${project.id}/`}
-        >{title}<span aria-hidden="true" class="title-arrow">↗</span></a
-      >
+      <a href={`/projects/${project.id}/`}>{title}</a>
     </Heading>
     <p class="work-description">{description}</p>
   </div>

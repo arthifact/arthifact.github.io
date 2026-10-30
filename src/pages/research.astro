@@ -12,11 +12,9 @@ const { data: page } = await pageContent("research");
 
 <PageLayout meta={page}>
   <PageIntro
-    number={page.number!}
     title={page.title}
-    description={page.intro!}
   />
-  <section class="research-list" aria-label="Research work">
+  <section class="work-grid" aria-label="Research work">
     {
       research.map((project, index) => (
         <WorkCard project={project} index={index} imageFit="contain" />

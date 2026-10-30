@@ -2,6 +2,7 @@
 featured: false
 title: "3D Voxel Character Demo"
 description: "A third-person voxel character in Unreal Engine 5 with interaction and puzzle systems."
+summary: "Unreal Engine · interaction."
 publishDate: "2 Apr 2024"
 coverImage:
   src: "./cover.png"
@@ -12,7 +13,7 @@ coverImage:
 A 3D voxel character demo made in **Unreal Engine 5**, with third-person movement, animations, and physics-based puzzles.  
  
 
-[Watch the project video on YouTube ↗](https://www.youtube.com/watch?v=4lQ5AzTQToo)
+[Watch the project video on YouTube](https://www.youtube.com/watch?v=4lQ5AzTQToo)
 
 ## Background  
 Created to explore voxel-style visuals, animation, and interaction.

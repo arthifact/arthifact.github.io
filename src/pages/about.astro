@@ -4,6 +4,8 @@ import { pageContent, cvContent } from "@/data/pages";
 import identity from "../../content/site/index.json";
 import PageIntro from "@/components/PageIntro.astro";
 import PageLayout from "@/layouts/Base.astro";
+import { Image } from "astro:assets";
+import portrait from "../../content/about/portrait.webp";
 const page = await pageContent("about");
 const { Content } = await render(page);
 const cv = await cvContent();
@@ -11,16 +13,32 @@ const cv = await cvContent();
 
 <PageLayout meta={page.data}>
   <PageIntro
-    number={page.data.number!}
     title={page.data.title}
-    description={page.data.intro!}
   />
   <div class="about-layout">
-    <div class="about-text"><Content /></div>
-    <aside class="about-sidebar" aria-label="CV and contact links">
+    <div class="about-text">
+      <Content />
+      <div class="about-contact">
+        <h2 class="eyebrow">Contact me</h2>
+        <p><a href={`mailto:${page.data.email}`}>{page.data.email}</a></p>
+      </div>
+    </div>
+    <aside class="about-sidebar" aria-label="Portrait, CV and contact links">
+      <Image
+        class="about-portrait"
+        src={portrait}
+        alt={`Portrait of ${identity.site.author}`}
+        widths={[400, 600, 800]}
+        sizes="(max-width: 760px) 100vw, 400px"
+        width={800}
+        height={600}
+        format="webp"
+        quality={82}
+        loading="eager"
+      />
       <h2 class="eyebrow">{page.data.cvTitle}</h2><ul>
         <li>
-          <a href={cv.href}>{cv.label}<span aria-hidden="true">↗</span></a>
+          <a href={cv.href} target="_blank" rel="noopener">{cv.label}</a>
         </li>
       </ul><h2 class="eyebrow">{page.data.socialTitle}</h2><ul>
         {
@@ -28,7 +46,6 @@ const cv = await cvContent();
             <li>
               <a href={link.href}>
                 {link.label}
-                <span aria-hidden="true">↗</span>
               </a>
             </li>
           ))

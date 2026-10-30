@@ -3,16 +3,14 @@ title: Portfolio
 description: Gabriel I. Alonso — environmental engineering graduate student.
   Research, projects, art, and writing.
 name: Gabriel I. Alonso
-role: Environmental engineering graduate student
-email: gialonsoser@gmail.com
 selectedTitle: Selected work
 selected:
   - id: article-exploring-dmesh
     title: DMesh++
     description: Differentiable meshing.
-  - id: cielo-g-framework
-    title: CIELO-G
-    description: Learning framework for Godot.
+  - id: audio-spectral-node-graph
+    title: Audio node graph
+    description: Sound as a node graph.
   - id: lego-utep-dino-animation
     title: LEGO animation
     description: UTEP · Blender.
@@ -25,8 +23,4 @@ selected:
   - id: behavioral-deplasticization-animation
     title: Deplasticization
     description: A short film in Spline.
-artwork:
-  label: Ponyo, 2008 · © Studio Ghibli
-  href: https://www.ghibli.jp/works/ponyo/
-  copyright: © 2008 Hayao Miyazaki/Studio Ghibli, NDHDMT
 ---

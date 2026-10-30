@@ -2,6 +2,7 @@
 featured: false
 title: "Infinite Runner (GMTK Game Jam)"
 description: "A fast-paced procedural runner built in 48 hours for a game jam."
+summary: "Procedural runner built in 48 hours."
 publishDate: "31 August 2024"
 coverImage:
   src: "./cover.png"
@@ -11,7 +12,7 @@ coverImage:
 ## Overview
 A fast-paced 3D infinite runner built in 48 hours for the **2024 GMTK Game Jam**. The game has a unique mechanic where the player’s size dynamically changes with speed.
 
-[Watch the project video on YouTube ↗](https://www.youtube.com/watch?v=bkGItTGZy54)
+[Watch the project video on YouTube](https://www.youtube.com/watch?v=bkGItTGZy54)
 
 ## Background
 Developed to explore procedural level design. The project focused on gameplay loops under time constraints.

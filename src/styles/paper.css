@@ -3,9 +3,6 @@
 @import "@fontsource/stix-two-text/latin-700.css";
 @import "@fontsource/stix-two-text/latin-700-italic.css";
 
-body:has(.paper) {
-  background: #eeece7;
-}
 body:has(.paper) .site-shell {
   width: min(1240px, calc(100% - clamp(40px, 8vw, 96px)));
 }
@@ -26,12 +23,8 @@ article.paper {
   text-rendering: optimizeLegibility;
 }
 .paper .article-topline {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
   margin: 0 0 26px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid #aaa99f;
+  color: var(--muted);
   font-family: var(--serif);
   font-size: 12px;
   letter-spacing: 0.08em;
@@ -50,42 +43,15 @@ article.paper {
   flex-direction: column;
   min-width: 0;
   min-height: 0;
-  padding: var(--paper-padding-block) var(--paper-padding-inline) 1.5em;
+  padding: 1em 0 1.5em;
   font-size: var(--paper-type-size);
-  border: 1px solid #dedbd3;
-  background: #fff;
-  box-shadow: 0 3px 16px rgb(40 37 28 / 5%);
+}
+.paper .paper-page + .paper-page {
+  border-top: 1px solid var(--line);
+  padding-top: var(--paper-padding-block);
 }
 .paper .paper-page-content {
   min-width: 0;
-}
-.paper .paper-running {
-  display: flex;
-  justify-content: space-between;
-  gap: 24px;
-  margin: 0 0 2.15em;
-  padding-bottom: 1em;
-  border-bottom: 1px solid #c9c7bb;
-  color: #66645d;
-  font-size: 0.75em;
-  letter-spacing: 0.025em;
-}
-.paper .paper-running span:last-child {
-  flex-shrink: 0;
-}
-.paper .paper-page-number {
-  margin-top: auto;
-  padding-top: 1.7em;
-  color: #66645d;
-  font-size: 0.765em;
-  font-variant-numeric: lining-nums tabular-nums;
-  text-align: center;
-}
-.paper .paper-page:nth-child(odd) .paper-page-number {
-  text-align: left;
-}
-.paper .paper-page:nth-child(even) .paper-page-number {
-  text-align: right;
 }
 .paper .article-heading {
   margin: 0 0 1.8em;
@@ -591,6 +557,10 @@ article.paper-editorial {
   max-width: 980px;
   margin-top: 32px;
 }
+.paper-editorial.paper-reading + .article-bottom {
+  max-width: 46rem;
+  margin-top: 8px;
+}
 .paper .article-prose .footnotes {
   margin-top: 3em;
   border-top: 1px solid #c7c7bd;
@@ -624,10 +594,25 @@ article.paper-editorial {
 .article-bottom {
   max-width: 740px;
 }
-/* A single reading measure keeps prose, equations, and headings in one path. */
-article.paper-reading {
-  --paper-type-size: 1.1875rem;
-  --paper-reading-width: 36rem;
+.paper .video-embed {
+  margin-block: 1.5em;
+}
+.paper .video-embed iframe {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--line);
+  background: #f1f0eb;
+}
+/* One reading column: the whole article, boxes and figures included, shares one width. */
+article.paper.paper-reading {
+  --paper-width: 46rem;
+  --paper-type-size: 0.9375rem;
+  --paper-reading-width: none;
+  margin-inline: auto;
+}
+.paper.paper-reading .article-heading h1 {
+  font-size: 1.875rem;
 }
 .paper-reading .article-heading {
   max-width: var(--paper-reading-width);
@@ -684,9 +669,6 @@ article.paper-reading {
     --paper-type-size: clamp(1rem, calc(0.75rem + 0.510204cqw), 1.0625rem);
     --paper-padding-inline: clamp(0.9375rem, 5.510204cqw, 3.375rem);
     --paper-padding-block: clamp(1.75rem, 4.897959cqw, 3rem);
-  }
-  article.paper-reading {
-    --paper-type-size: clamp(1.125rem, calc(0.875rem + 0.510204cqw), 1.1875rem);
   }
   .paper .article-heading h1 {
     font-size: clamp(2.125rem, 6.486486cqw, 3rem);
@@ -763,9 +745,6 @@ article.paper-reading {
   }
   .paper .paper-page + .paper-page {
     break-before: page;
-  }
-  .paper .paper-page-number {
-    padding-top: 6mm;
   }
   .paper .article-heading h1 {
     font-size: 28pt;

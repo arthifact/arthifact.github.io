@@ -2,6 +2,7 @@
 featured: false
 title: "Spaceship Navigation Controller"
 description: "A custom input and control system for physics-based spaceship mechanics."
+summary: "Physics-based spaceship controls."
 publishDate: "11 Oct 2024"
 coverImage:
   src: "./cover.png"
@@ -11,7 +12,7 @@ coverImage:
 ## Overview
 A 3D spaceship demo made in Godot 4 with physics-based flight, thrust control, and smooth camera movement. Designed for easy and responsive gamepad controls.
 
-[Watch the project video on YouTube ↗](https://www.youtube.com/watch?v=5Go4tlv9tks)
+[Watch the project video on YouTube](https://www.youtube.com/watch?v=5Go4tlv9tks)
 
 ## Background
 Created to test flight-style controls and camera motion in Godot 4. The goal was to make flying feel natural and fun.
