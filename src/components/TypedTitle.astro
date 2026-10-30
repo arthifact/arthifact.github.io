@@ -1,0 +1,31 @@
+---
+// Renders a title that types itself out letter by letter, in CSS only.
+// Assistive technology reads the plain text; the letters are decorative.
+interface Props {
+  text: string;
+  dot?: boolean;
+}
+const { text, dot = false } = Astro.props;
+const words = text.split(" ");
+const letters = text.replace(/ /g, "").length + (dot ? 1 : 0);
+// About 35ms per letter, but a long title never takes more than ~0.9s.
+const step = Math.min(35, 900 / Math.max(letters, 1));
+let index = 0;
+const char = (value: string, extra = "") =>
+  `<span class="typed-char${extra}" style="animation-delay:${Math.round(index++ * step)}ms">${value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")}</span>`;
+const html = words
+  .map((word, w) => {
+    const chars = [...word].map((c) => char(c)).join("");
+    const tail = dot && w === words.length - 1 ? char(".", " accent-dot") : "";
+    return `<span class="typed-word">${chars}${tail}</span>`;
+  })
+  .join(" ");
+---
+
+<span class="sr-only">{text}{dot && "."}</span><span
+  class="typed"
+  aria-hidden="true"
+  set:html={html}
+/>

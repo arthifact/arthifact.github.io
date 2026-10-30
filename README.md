@@ -1,6 +1,6 @@
 # Gabriel I. Alonso — portfolio
 
-A static research and creative portfolio at [arthifact.com](https://arthifact.com/), built with Astro. The design uses a paper-like background, serif typography, and a compact homepage with six selected works and a Ponyo still selected randomly on each homepage load. Navigation stays at the top. Selected work keeps the same card layout and 16:9 image frames at every size: three columns above 600px and two on smaller screens.
+A static research and creative portfolio at [arthifact.com](https://arthifact.com/), built with Astro. The design uses a paper-like background, serif typography, and a compact homepage of six selected works. The About page holds the portrait and introduction. Navigation stays at the top. Selected work keeps the same card layout and 16:9 image frames at every size: three columns above 600px and two on smaller screens.
 
 ## Run and verify
 
@@ -16,7 +16,7 @@ npm run verify:site
 npm run preview
 ```
 
-`npm run build` refreshes the content cache and verifies the generated site. The homepage uses one small inline script to choose a Ponyo still; navigation and content also work with JavaScript disabled. The other core pages ship no client JavaScript. Index pages use system fonts; articles use locally hosted STIX Two Text. There are no external font requests or video players on initial load. The interactive Earth model loads its third-party viewer only after the reader requests it.
+`npm run build` refreshes the content cache and verifies the generated site. Core pages ship no client JavaScript. Index pages use system fonts; articles use locally hosted STIX Two Text. There are no external font requests or video players on initial load. The interactive Earth model loads its third-party viewer only after the reader requests it.
 
 The verification command checks every built page for broken local links and anchors, image dimensions, a main heading, the CV, RSS content, and a 24 KiB gzipped HTML budget for the core pages. Gallery checks also exercise all 50 choices, repeat avoidance, unavailable session storage, and fallback behavior. GitHub Actions runs type checks, the production build, and verification on pull requests.
 
@@ -39,7 +39,7 @@ Add Markdown posts in `content/blog/` with `title`, `description`, and `publishD
 
 See the live [paper example](https://arthifact.com/posts/paper-example/), also linked at the top of Blog. It uses synthetic data to demonstrate the layout; it is unlisted, marked noindex and excluded from RSS, and is not a research entry. The optional figure generation script uses Python, NumPy, and Matplotlib; these are not site build dependencies.
 
-Research writeups, projects, art, posts, and notes use white paper sheets with STIX Two Text, a centered title and author line, an abstract, numbered sections, and fine rules. Each page reads down the left column, then continues from the top of the right. Headings, paragraphs, equations, tables, code, and footnotes share that continuous flow; headings never restart column pairs. A quiet gutter separates the columns. Wide figures can span the sheet above or below its text. Type, margins, and spacing scale smoothly with the sheet width using CSS container units and rem limits, with no layout JavaScript. Phones use one reading column. Covers remain thumbnails on index pages; insert article figures where they belong. Print styles remove navigation, shadows, and borders and respect authored page breaks.
+Research writeups, projects, art, posts, and notes use white paper sheets with STIX Two Text, a centered title and author line, an abstract, numbered sections, and fine rules. Text reads in a single centered column by default, like an arXiv HTML preview; set `columns: 2` for a two-column paper flow that reads down the left column, then continues from the top of the right. Type, margins, and spacing scale smoothly with the sheet width using CSS container units and rem limits, with no layout JavaScript. Phones use one reading column. Covers remain thumbnails on index pages; insert article figures where they belong. Print styles remove navigation, shadows, and borders and respect authored page breaks.
 
 Start from `content/templates/paper.md` for plain text, math, and tables, or `content/templates/paper.mdx` for captioned figures and paired panels. Copy it into `content/blog/<slug>/index.md` (or `.mdx`), set the title, summary, and date, and write the body. Remove `unlisted: true` when you want it in the blog and RSS. For a project, use `content/projects/<slug>/index.mdx` (or use `content/research/` or `content/art/`). Authors default to Gabriel I. Alonso; add an `authors` array for coauthors.
 
@@ -49,15 +49,17 @@ Optional frontmatter:
 format: paper
 abstract: "The question, method, and main result in one paragraph."
 numberedSections: true
-columns: 2 # The default paper layout; use 1 for a single reading column.
+columns: 1 # The default single reading column; use 2 for a two-column paper flow.
 authors: ["Gabriel I. Alonso", "Coauthor"]
 affiliation: "Your institution"
 pdf: "./your-paper.pdf"
 ```
 
-`abstract` replaces the description with a manuscript abstract below the title. `columns` defaults to 2 for a continuous paper flow, down the left column and back to the top of the right; 1 remains available for a single reading column. `numberedSections` numbers level-two headings while preserving their anchors; footnotes are not numbered as a section. `pdf` adds a download link: place a PDF beside the article and use `./your-paper.pdf` or use an HTTPS URL. Existing PDF papers can accompany the readable HTML article.
+`abstract` replaces the description with a manuscript abstract below the title. `columns` defaults to 1 for a single reading column; 2 gives a continuous paper flow, down the left column and back to the top of the right. `numberedSections` numbers level-two headings while preserving their anchors; footnotes are not numbered as a section. `pdf` adds a download link: place a PDF beside the article and use `./your-paper.pdf` or use an HTTPS URL. Existing PDF papers can accompany the readable HTML article.
 
 Short pieces use one sheet by default. To start another sheet in MDX, import `PageBreak` from `@/components/paper/PageBreak.astro` and insert `<PageBreak />` on its own line between sections. Plain Markdown uses `<div data-paper-break></div>` on its own line. Page numbers are automatic, and section numbers, equation anchors, and footnotes continue through the document. Each sheet ends naturally after its content and bottom margin, so short articles have no forced empty page area. Content is never clipped or shrunk to fit. Breaks are chosen by the author rather than measured by browser JavaScript.
+
+A YouTube link on its own line becomes an embedded player. It shows only the video thumbnail until someone presses play, so the page loads no YouTube code up front.
 
 In MDX, import `Figure`, `FigureGrid`, `Table`, and `Block` from `@/components/paper/`. Figures, tables, and ordinary Markdown images use one column by default. Add `wide` to a component to span both columns, like a LaTeX `figure*` or `table*`. A wide block floats to the top of its authored sheet, or to the bottom with `placement="bottom"`; it never inserts another column pair in the middle of the text. Float placement stays within the author’s page breaks. The HTML reading and keyboard order follows that displayed placement.
 
@@ -76,14 +78,10 @@ LaTeX equations work in both `.md` and `.mdx`: use `$x^2$` inline or `$$` on sep
 - Biography: `content/about/index.md`.
 - CV: replace `content/cv/Gabriel_Isaac_Alonso_Serrato_CV.pdf`.
 - Site design: `src/styles/global.css`. Article typography and print styles: `src/styles/paper.css`.
-- Homepage stills: `content/home/ponyo/`; descriptions: `content/home/ponyo/descriptions.json`; credit: `content/home/index.md`. The existing random selection, repeat avoidance, and fallback behavior remain in `src/components/OceanStill.astro`.
+- About portrait: `content/about/portrait.webp`.
 - Logo and icons: `content/site/logo.svg` and `content/site/icons/`. Regenerate them with `node scripts/generate-logo.mjs`.
 - Social preview: `content/site/social-card.png`.
 - Legacy public URLs: `content/site/asset-aliases.json`. Files are served from their new content locations at the original addresses.
-
-## Artwork credit
-
-The 50 homepage stills are from [Ponyo (2008), Studio Ghibli’s official gallery](https://www.ghibli.jp/works/ponyo/). © 2008 Hayao Miyazaki/Studio Ghibli, NDHDMT. The gallery provides stills for use within the bounds of common sense. This third-party artwork remains under its original copyright and is not covered by the repository’s software license.
 
 ## Deployment
 

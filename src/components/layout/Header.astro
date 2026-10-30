@@ -26,16 +26,11 @@ const isCurrent = (path: string) =>
 <header class="site-header">
   <a class="wordmark" href="/" aria-label={`${identity.site.author} — home`}>
     <Logo class="wordmark-symbol" />
-    {
-      pathname !== "/" && (
-        <span>
-          {identity.shortName}
-          <span class="wordmark-dot" aria-hidden="true">
-            .
-          </span>
-        </span>
-      )
-    }
+    <span>
+      {identity.site.author}<span class="wordmark-dot" aria-hidden="true"
+        >.</span
+      >
+    </span>
   </a>
   <nav aria-label="Main navigation" class="main-nav">
     {
@@ -49,9 +44,8 @@ const isCurrent = (path: string) =>
       ))
     }
   </nav>
-  <a class="header-cv mono" href={cv.href}
-    >{cv.navLabel}
-    <span aria-hidden="true">↗</span><span class="sr-only">
+  <a class="header-cv mono" href={cv.href} target="_blank" rel="noopener"
+    >{cv.navLabel}<span class="sr-only">
       ({cv.format})</span
     ></a
   >

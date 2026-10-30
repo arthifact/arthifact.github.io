@@ -15,6 +15,7 @@ import remarkDirective from "remark-directive"; /* Handle ::: directives as node
 import remarkMath from "remark-math";
 import { remarkAdmonitions } from "./src/plugins/remark-admonitions"; /* Add admonitions */
 import { remarkGithubCard } from "./src/plugins/remark-github-card";
+import { remarkYoutubeEmbed } from "./src/plugins/remark-youtube-embed";
 import { remarkContentLinks } from "./src/plugins/remark-content-links";
 import { rehypeMath } from "./src/plugins/rehype-math";
 import { expressiveCodeOptions, siteConfig } from "./src/site.config";
@@ -56,6 +57,7 @@ export default defineConfig({
         remarkContentLinks,
         remarkDirective,
         remarkGithubCard,
+        remarkYoutubeEmbed,
         remarkAdmonitions,
       ],
       remarkRehype: {

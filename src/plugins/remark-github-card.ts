@@ -23,8 +23,14 @@ export const remarkGithubCard: Plugin<[], Root> = () => (tree) => {
       index,
       1,
       h("div", { class: "static-repo-link" }, [
+        h("span", { class: "static-repo-label" }, [
+          {
+            type: "text",
+            value: node.attributes?.repo ? "GitHub repository" : "GitHub profile",
+          },
+        ]),
         h("a", { href: `https://github.com/${name}` }, [
-          { type: "text", value: `${name} ↗` },
+          { type: "text", value: name },
         ]),
       ]),
     );

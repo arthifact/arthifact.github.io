@@ -2,6 +2,7 @@
 featured: false
 title: "Behavioral Deplasticization Animation"
 description: "A 3D short created in Spline 3D and Adobe Premiere to visualize the concept of behavioral deplasticization and promote environmental awareness"
+summary: "A short film in Spline."
 publishDate: "15 Jul 2025"
 coverImage:
   src: "./cover.png"
@@ -11,7 +12,7 @@ coverImage:
 ## Overview  
 A 3D short film created with **Spline 3D** and **Adobe Premiere**, illustrating the idea of **behavioral deplasticization** — how small daily actions can collectively reduce plastic consumption and pollution.
 
-[Watch the project video on YouTube ↗](https://www.youtube.com/watch?v=Kw-rQaSbIZk)
+[Watch the project video on YouTube](https://www.youtube.com/watch?v=Kw-rQaSbIZk)
 
 ## Background  
 This animation was developed to communicate environmental concepts through visual storytelling. Inspired by the psychology of **habit formation** and **sustainability education**, the project explores how art and motion can encourage positive ecological behavior.

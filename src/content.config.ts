@@ -14,7 +14,7 @@ const baseSchema = z.object({
   title: titleSchema,
   authors: z.array(z.string()).min(1).default([content.site.author]),
   format: z.enum(["article", "paper"]).default("article"),
-  columns: z.union([z.literal(1), z.literal(2)]).default(2),
+  columns: z.union([z.literal(1), z.literal(2)]).default(1),
   abstract: z.string().optional(),
   affiliation: z.string().optional(),
   numberedSections: z.boolean().default(false),
@@ -76,6 +76,8 @@ const project = defineCollection({
   schema: ({ image }) =>
     baseSchema.extend({
       description: z.string(),
+      /** One short line for cards; the full description stays on the page itself. */
+      summary: z.string().optional(),
       kind: z.enum(["research", "project", "art"]).default("project"),
       featured: z.boolean().default(false),
       coverImage: z
@@ -95,7 +97,6 @@ const project = defineCollection({
     }),
 });
 
-const link = z.object({ label: z.string(), href: z.string() });
 const page = defineCollection({
   loader: glob({
     base: "./content",
@@ -104,8 +105,6 @@ const page = defineCollection({
   schema: z.object({
     title: titleSchema,
     description: z.string().default(content.site.description),
-    number: z.string().optional(),
-    intro: z.string().optional(),
     name: z.string().optional(),
     role: z.string().optional(),
     email: z.string().optional(),
@@ -119,15 +118,6 @@ const page = defineCollection({
         }),
       )
       .optional(),
-    artwork: z
-      .object({ label: z.string(), href: z.string(), copyright: z.string() })
-      .optional(),
-    topline: z.string().optional(),
-    countLabel: z.string().optional(),
-    link: link.optional(),
-    links: z.array(link).optional(),
-    note: z.string().optional(),
-    noteLink: link.optional(),
     cvTitle: z.string().optional(),
     socialTitle: z.string().optional(),
     download: z.string().optional(),

@@ -12,23 +12,13 @@ const { data: page } = await pageContent("art");
 
 <PageLayout meta={page}>
   <PageIntro
-    number={page.number!}
     title={page.title}
-    description={page.intro!}
   />
-  <div class="index-topline mono">
-    <span>{page.topline}</span><a href={page.link!.href}>{page.link!.label}</a>
-  </div>
-  <div class="work-grid art-grid">
+  <div class="work-grid">
     {
       projects.map((project, index) => (
         <WorkCard project={project} index={index} />
       ))
     }
-  </div>
-  <div class="simple-note">
-    <p>{page.note}</p><a class="text-link mono" href={page.noteLink!.href}
-      >{page.noteLink!.label}</a
-    >
   </div>
 </PageLayout>

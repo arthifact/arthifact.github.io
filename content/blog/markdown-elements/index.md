@@ -282,7 +282,7 @@ This is a note with a custom title.
 :::
 
 ## GitHub Repository Cards
-You can add dynamic cards that link to GitHub repositories, on page load, the repository information is pulled from the GitHub API.
+You can add a labeled link to a GitHub repository. It is static: no scripts or API requests.
 
 ::github{repo="chrismwilliams/astro-theme-cactus"}
 

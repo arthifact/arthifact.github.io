@@ -1,9 +1,9 @@
 ---
 import { pageContent } from "@/data/pages";
 import { getCollection } from "astro:content";
-import OceanStill from "@/components/OceanStill.astro";
 import WorkCard from "@/components/WorkCard.astro";
 import PageLayout from "@/layouts/Base.astro";
+import PageIntro from "@/components/PageIntro.astro";
 
 const projects = await getCollection("project");
 const { data: home } = await pageContent("home");
@@ -15,18 +15,13 @@ const selected = home.selected!.map(({ id, ...copy }) => {
 ---
 
 <PageLayout meta={home} showFooter={false}>
-  <div class="home-intro">
-    <div class="home-identity">
-      <h1>{home.name}<span class="accent-dot">.</span></h1>
-      <p>{home.role}</p>
-      <p class="home-contact">
-        <a href={`mailto:${home.email}`}>{home.email}</a>
-      </p>
-    </div>
-    <OceanStill />
-  </div>
+  <h1 class="sr-only">{home.name}</h1>
   <section class="selected-section" aria-labelledby="selected-title">
-    <h2 id="selected-title" class="eyebrow">{home.selectedTitle}</h2>
+    <PageIntro
+      level="h2"
+      id="selected-title"
+      title={home.selectedTitle!}
+    />
     <div class="selected-grid">
       {
         selected.map(({ project, title, description }, index) => (

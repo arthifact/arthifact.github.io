@@ -16,15 +16,8 @@ const { data: page } = await pageContent("projects");
 
 <PageLayout meta={page}>
   <PageIntro
-    number={page.number!}
     title={page.title}
-    description={page.intro!}
   />
-  <div class="index-topline mono">
-    <span>{String(projects.length).padStart(2, "0")} {page.countLabel}</span><a
-      href={page.link!.href}>{page.link!.label}</a
-    >
-  </div>
   <div class="work-grid">
     {
       projects.map((project, index) => (

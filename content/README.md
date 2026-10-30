@@ -4,9 +4,9 @@ All writing, images, downloads, and personal information live in this folder. Th
 
 ```text
 content/
-  home/index.md           Name, role, email, and selected work
-  home/ponyo/             Homepage stills and their descriptions
+  home/index.md           Name and selected work
   about/index.md          Biography and About introduction
+  about/portrait.webp     About portrait
   research/               Research writing and its files
   projects/               Software, games, and interactive work
   art/                    Artwork and animation

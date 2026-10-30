@@ -5,6 +5,7 @@ import mathStyles from "@/styles/math.css?url";
 import paperStyles from "@/styles/paper.css?url";
 import { formatPaperPages } from "@/utils/paper";
 import BaseLayout from "./Base.astro";
+import TypedTitle from "@/components/TypedTitle.astro";
 interface Props {
   post:
     | CollectionEntry<"post">
@@ -73,6 +74,7 @@ const hasMath = pages.some((content) => /class="[^"]*\bkatex\b/.test(content));
     <link rel="stylesheet" href={paperStyles} data-paper-styles />
     {hasMath && <link rel="stylesheet" href={mathStyles} data-math-styles />}
   </Fragment>
+  <div class="reading-progress" aria-hidden="true"></div>
   <article
     class:list={[
       "paper",
@@ -86,11 +88,6 @@ const hasMath = pages.some((content) => /class="[^"]*\bkatex\b/.test(content));
   >
     <div class="article-topline mono">
       <a href={backLink}>← {backLabel}</a>
-      <span
-        >{format === "paper" ? "Paper" : "Article"}{
-          pages.length > 1 && ` · ${pages.length} pages`
-        }</span
-      >
     </div>
     <div class="paper-sheets">
       {
@@ -104,7 +101,7 @@ const hasMath = pages.some((content) => /class="[^"]*\bkatex\b/.test(content));
               {index === 0 ? (
                 <header class="article-heading">
                   <div class="article-title-block">
-                    <h1>{title}</h1>
+                    <h1><TypedTitle text={title} /></h1>
                     <p class="article-byline">
                       <span>{authors.join(" · ")}</span>
                       <span aria-hidden="true">·</span>
@@ -142,37 +139,23 @@ const hasMath = pages.some((content) => /class="[^"]*\bkatex\b/.test(content));
                       </p>
                     )}
                   </div>
-                  {(abstract || description) && (
+                  {abstract && (
                     <div class="article-summary">
-                      {abstract ? (
-                        <p class="article-abstract">
-                          <strong>Abstract.</strong> {abstract}
-                        </p>
-                      ) : (
-                        <p class="article-description">{description}</p>
-                      )}
+                      <p class="article-abstract">
+                        <strong>Abstract.</strong> {abstract}
+                      </p>
                     </div>
                   )}
                 </header>
-              ) : (
-                <div class="paper-running" aria-hidden="true">
-                  <span>{title}</span>
-                  <span>{format === "paper" ? "Paper" : "Article"}</span>
-                </div>
-              )}
+              ) : null}
               <div class="prose article-prose" set:html={content} />
-            </div>
-            <div class="paper-page-number" aria-hidden="true">
-              {index + 1} / {pages.length}
             </div>
           </section>
         ))
       }
     </div>
   </article>
-  <div class="article-bottom mono">
-    <a href={backLink}>← Back to {backLabel.toLowerCase()}</a><a href="#main"
-      >Back to top ↑</a
-    >
+  <div class="article-bottom">
+    <a href={backLink}>← Back to {backLabel.toLowerCase()}</a>
   </div>
 </BaseLayout>

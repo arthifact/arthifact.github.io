@@ -1,14 +1,13 @@
 ---
+import TypedTitle from "./TypedTitle.astro";
 interface Props {
-  number: string;
   title: string;
-  description: string;
+  level?: "h1" | "h2";
+  id?: string;
 }
-const { number, title, description } = Astro.props;
+const { title, level: Heading = "h1", id } = Astro.props;
 ---
 
-<div class="page-intro">
-  <p class="eyebrow">{number} / Index</p><h1>
-    {title}<span class="accent-dot">.</span>
-  </h1><p class="intro-description">{description}</p>
+<div class="page-head">
+  <Heading id={id}><TypedTitle text={title} dot /></Heading>
 </div>
