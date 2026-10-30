@@ -1,12 +1,8 @@
 ---
-featured: false
 title: "3D Learning Game for Kids"
-description: "A colorful, 3D interactive educational game aimed at engaging young learners."
 summary: "Educational 3D game for kids."
 publishDate: "6 November 2024"
-coverImage:
-  src: "./cover.png"
-  alt: "3D learning game  cover"
+cover: ./cover.png
 ---
 
 ## Overview

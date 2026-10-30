@@ -1,12 +1,8 @@
 ---
-featured: false
 title: "Spaceship Navigation Controller"
-description: "A custom input and control system for physics-based spaceship mechanics."
 summary: "Physics-based spaceship controls."
 publishDate: "11 Oct 2024"
-coverImage:
-  src: "./cover.png"
-  alt: "Spaceship controller cover"
+cover: ./cover.png
 ---
 
 ## Overview

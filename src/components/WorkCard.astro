@@ -16,14 +16,14 @@ const {
   project,
   index,
   title = project.data.title,
-  description = project.data.summary ?? project.data.description,
+  description = project.data.summary,
   loading = "lazy",
   priority = false,
   imageSizes = "(max-width: 470px) 100vw, (max-width: 760px) 50vw, 33vw",
   imageFit = "cover",
   headingLevel = 2,
 } = Astro.props;
-const { coverImage, kind, publishDate } = project.data;
+const { cover, kind, type, publishDate } = project.data;
 const Heading = headingLevel === 2 ? "h2" : "h3";
 ---
 
@@ -35,9 +35,9 @@ const Heading = headingLevel === 2 ? "h2" : "h3";
     ]}
   >
     {
-      coverImage && (
+      cover && (
         <Image
-          src={coverImage.src}
+          src={cover}
           alt=""
           widths={[240, 400, 640, 960]}
           sizes={imageSizes}
@@ -58,11 +58,12 @@ const Heading = headingLevel === 2 ? "h2" : "h3";
         >{
           index !== undefined ? `${String(index + 1).padStart(2, "0")} / ` : ""
         }{
-          kind === "research"
-            ? "Research essay"
-            : kind === "art"
-              ? "Art & animation"
-              : "Project"
+          type ??
+            (kind === "research"
+              ? "Research essay"
+              : kind === "art"
+                ? "Art & animation"
+                : "Project")
         }</span
       ><time datetime={publishDate.toISOString()}
         >{publishDate.getUTCFullYear()}</time

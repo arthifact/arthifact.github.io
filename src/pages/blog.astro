@@ -1,6 +1,6 @@
 ---
-import { pageContent } from "@/data/pages";
-const { data: page } = await pageContent("blog");
+import { sectionPage } from "@/data/pages";
+const page = sectionPage("blog");
 import BlogIndex from "@/components/BlogIndex.astro";
 import PageLayout from "@/layouts/Base.astro";
 ---

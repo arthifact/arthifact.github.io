@@ -1,12 +1,8 @@
 ---
-featured: false
 title: "Infinite Runner (GMTK Game Jam)"
-description: "A fast-paced procedural runner built in 48 hours for a game jam."
 summary: "Procedural runner built in 48 hours."
 publishDate: "31 August 2024"
-coverImage:
-  src: "./cover.png"
-  alt: "Endless runner cover"
+cover: ./cover.png
 ---
 
 ## Overview

@@ -37,10 +37,7 @@ export function relativeContentPath(file: string) {
     throw new Error(`Content files must stay inside content/: ${file}`);
   }
   const path = relative(contentRoot, target).split(sep).join("/");
-  if (
-    path.split("/").some((part) => part.startsWith(".")) ||
-    path.startsWith("templates/")
-  ) {
+  if (path.split("/").some((part) => part.startsWith("."))) {
     throw new Error(`This content file is not public: ${file}`);
   }
   return path;

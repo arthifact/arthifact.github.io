@@ -2,11 +2,11 @@
 @config "../../tailwind.config.ts";
 @variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 @theme {
-  --color-global-bg: #faf9f6;
-  --color-global-text: #252722;
+  --color-global-bg: #fcfaf8;
+  --color-global-text: #352f31;
   --color-link: #4c6246;
   --color-accent: #4c6246;
-  --color-accent-2: #252722;
+  --color-accent-2: #352f31;
   --color-quote: #4c6246;
 }
 @layer base {
@@ -41,7 +41,7 @@
   }
   ::selection {
     background: #dbe2ce;
-    color: #252722;
+    color: #352f31;
   }
   :target {
     scroll-margin-block: 3rem;
@@ -73,8 +73,8 @@
   --tw-prose-th-borders: #d5d5ca;
 }
 :root {
-  --line: #deded4;
-  --muted: #64675e;
+  --line: #e6dcda;
+  --muted: #74676d;
   --serif: Georgia, "Times New Roman", serif;
   --sans: Arial, Helvetica, sans-serif;
   --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
@@ -91,23 +91,6 @@
   border-bottom: 1px solid var(--line);
   margin-bottom: 38px;
   view-transition-name: site-header;
-}
-/* Frosted header: stays pinned and blurs the page scrolling beneath it. */
-@media (min-width: 761px) {
-  html {
-    scroll-padding-top: 7rem;
-  }
-  /* The blur sits on the header itself: its view-transition-name would cut off a
-     backdrop drawn by a child or pseudo-element. */
-  .site-header {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    padding: 20px 0;
-    background: color-mix(in srgb, var(--color-global-bg) 72%, transparent);
-    -webkit-backdrop-filter: saturate(1.6) blur(18px);
-    backdrop-filter: saturate(1.6) blur(18px);
-  }
 }
 /* Pages cross-fade on navigation; the header stays put. No JavaScript. */
 @media (prefers-reduced-motion: no-preference) {
@@ -169,7 +152,7 @@
 }
 .main-nav a:hover,
 .main-nav a[aria-current="page"] {
-  border-color: #252722;
+  border-color: #352f31;
 }
 .header-cv {
   font-size: 12px;
@@ -270,8 +253,10 @@
   white-space: nowrap;
 }
 @media (prefers-reduced-motion: no-preference) {
+  /* Fill backwards only: once a letter's moment passes it shows normally, so a
+     rounding error at the last frame can never leave it hidden. */
   .typed-char {
-    animation: type-in 1ms step-end both;
+    animation: type-in 1ms step-end backwards;
   }
 }
 @keyframes type-in {
@@ -382,10 +367,6 @@
   font-family: var(--sans);
   font-size: 11px;
 }
-.footer-links a:hover {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
 .footer-links .mono {
   font-size: 11px;
   color: var(--muted);
@@ -423,6 +404,9 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 48px 28px;
+}
+.writing-empty {
+  color: var(--muted);
 }
 .writing-row:first-child {
   padding-top: 0;
@@ -479,7 +463,8 @@
   text-underline-offset: 3px;
 }
 /* Links in writing: a faint underline at rest, a solid one drawn in on hover. */
-:is(.article-prose, .about-text) :is(p, li) a {
+:is(.article-prose, .about-text) :is(p, li) a,
+.static-repo-link a {
   text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
   background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 0
     1px;
@@ -489,12 +474,27 @@
     background-size 350ms cubic-bezier(0.22, 1, 0.36, 1),
     text-decoration-color 200ms;
 }
-:is(.article-prose, .about-text) :is(p, li) a:is(:hover, :focus-visible) {
+:is(.article-prose, .about-text) :is(p, li) a:is(:hover, :focus-visible),
+.static-repo-link a:is(:hover, :focus-visible) {
   text-decoration-color: transparent;
   background-size: 100% 1px;
 }
+/* Small links (back, footer): no underline at rest, the same line drawn in on hover. */
+.footer-links a,
+.article-bottom a,
+.article-topline a {
+  text-decoration: none;
+  background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 0
+    1px;
+  transition: background-size 350ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+:is(.footer-links, .article-bottom, .article-topline) a:is(:hover, :focus-visible) {
+  background-size: 100% 1px;
+}
 @media (prefers-reduced-motion: reduce) {
-  :is(.article-prose, .about-text) :is(p, li) a {
+  :is(.article-prose, .about-text) :is(p, li) a,
+  .static-repo-link a,
+  :is(.footer-links, .article-bottom, .article-topline) a {
     transition: none;
   }
 }
@@ -606,19 +606,15 @@
   overflow-x: auto;
 }
 .article-bottom {
-  max-width: 720px;
-  margin: 50px auto 0;
+  margin: 50px 0 0;
   color: var(--muted);
   font-family: var(--serif);
   font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
-.article-bottom a:hover {
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
 .static-repo-link {
+  margin-block: 16px;
   padding: 16px 20px;
   border: 1px solid var(--line);
   background: #f0f1e9;

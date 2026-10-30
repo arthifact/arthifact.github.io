@@ -1,4 +1,5 @@
 import { getEntry } from "astro:content";
+import content from "../../content/site/index.json";
 import { contentFileUrl } from "@/utils/content-files";
 
 export async function pageContent(id: string) {
@@ -9,6 +10,11 @@ export async function pageContent(id: string) {
       `Could not render content/${id}/index.md. Check its Markdown and local links.`,
     );
   return page;
+}
+
+/** Title and description of a list page, from "sections" in content/site/index.json. */
+export function sectionPage(id: keyof typeof content.sections) {
+  return content.sections[id];
 }
 
 export async function cvContent() {

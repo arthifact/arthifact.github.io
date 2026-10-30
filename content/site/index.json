@@ -78,5 +78,23 @@
       "label": "RSS",
       "href": "/rss.xml"
     }
-  ]
+  ],
+  "sections": {
+    "research": {
+      "title": "Research",
+      "description": "Research interests and writing by Gabriel I. Alonso, spanning geometry, the environment, and art."
+    },
+    "projects": {
+      "title": "Projects",
+      "description": "Open-source tools, interactive systems, and graphics experiments by Gabriel I. Alonso."
+    },
+    "art": {
+      "title": "Art",
+      "description": "3D art and animation by Gabriel I. Alonso, also known as Arthifact."
+    },
+    "blog": {
+      "title": "Blog",
+      "description": "Essays and working notes on geometry, computation, and creative work by Gabriel I. Alonso."
+    }
+  }
 }

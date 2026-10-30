@@ -1,12 +1,8 @@
 ---
-featured: false
 title: "Audio Spectral Node Graph"
-description: "An audio visualizer that shows sound as a node graph."
 summary: "Sound as a node graph."
 publishDate: "3 May 2026"
-coverImage:
-  src: "./cover.jpg"
-  alt: "Glowing node graph visualizing music on a black background"
+cover: ./cover.jpg
 ---
 
 ## Overview  

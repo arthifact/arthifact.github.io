@@ -7,7 +7,6 @@ import { defineConfig } from "astro/config";
 import expressiveCode from "astro-expressive-code";
 import icon from "astro-icon";
 import robotsTxt from "astro-robots-txt";
-import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import { rehypeArticleLinks } from "./src/plugins/rehype-article-links";
 import rehypeUnwrapImages from "rehype-unwrap-images";
 // Remark plugins
@@ -31,12 +30,7 @@ export default defineConfig({
   integrations: [
     expressiveCode(expressiveCodeOptions),
     icon(),
-    sitemap({
-      filter: (page) =>
-        !["/posts/markdown-elements/", "/posts/paper-example/"].some((sample) =>
-          page.includes(sample),
-        ),
-    }),
+    sitemap(),
     mdx(),
     robotsTxt(),
   ],
@@ -45,10 +39,6 @@ export default defineConfig({
       rehypePlugins: [
         rehypeMath,
         rehypeHeadingIds,
-        [
-          rehypeAutolinkHeadings,
-          { behavior: "wrap", properties: { className: ["not-prose"] } },
-        ],
         rehypeArticleLinks,
         rehypeUnwrapImages,
       ],

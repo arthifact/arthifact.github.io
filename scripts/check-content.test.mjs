@@ -8,7 +8,7 @@ import {
   relativeContentPath,
 } from "../src/utils/content-files.ts";
 
-const article = resolve("content/blog/paper-example/index.mdx");
+const article = resolve("content/research/cielo-g-learning-framework/index.mdx");
 
 test("existing CV and figure addresses still resolve from neighboring files", () => {
   assert.equal(
@@ -19,12 +19,8 @@ test("existing CV and figure addresses still resolve from neighboring files", ()
     "/files/Gabriel_Isaac_Alonso_Serrato_CV.pdf#page=2",
   );
   assert.equal(
-    contentFileUrl(article, "./reconstruction.svg?download=1"),
-    "/images/paper-example/reconstruction.svg?download=1",
-  );
-  assert.equal(
-    contentFileUrl(article, "./sampling-matrix.png"),
-    "/content/blog/paper-example/sampling-matrix.png",
+    contentFileUrl(article, "./poster.webp?download=1"),
+    "/content/research/cielo-g-learning-framework/poster.webp?download=1",
   );
 });
 
@@ -49,15 +45,11 @@ test("invalid downloads fail clearly without exposing source or paths outside co
     /inside content/,
   );
   assert.throws(
-    () => contentFileUrl(article, "./results.json"),
+    () => contentFileUrl(article, "./index.mdx"),
     /Unsupported attachment/,
   );
   assert.throws(
     () => relativeContentPath(resolve("content/.private/file.pdf")),
-    /not public/,
-  );
-  assert.throws(
-    () => contentFileUrl(article, "../../templates/paper.md"),
     /not public/,
   );
 });
@@ -114,13 +106,13 @@ test("an image and a download can share a Markdown reference without breaking ei
           },
         ],
       },
-      { type: "definition", identifier: "plot", url: "./sampling-matrix.png" },
+      { type: "definition", identifier: "plot", url: "./poster.webp" },
     ],
   };
   remarkContentLinks()(tree, { path: article });
   assert.equal(
     tree.children[0].children[1].url,
-    "/content/blog/paper-example/sampling-matrix.png",
+    "/content/research/cielo-g-learning-framework/poster.webp",
   );
-  assert.equal(tree.children[1].url, "./sampling-matrix.png");
+  assert.equal(tree.children[1].url, "./poster.webp");
 });

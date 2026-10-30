@@ -5,68 +5,53 @@ All writing, images, downloads, and personal information live in this folder. Th
 ```text
 content/
   home/index.md           Name and selected work
-  about/index.md          Biography and About introduction
-  about/portrait.webp     About portrait
+  about/                  Biography and portrait
   research/               Research writing and its files
   projects/               Software, games, and interactive work
   art/                    Artwork and animation
   blog/                   Blog posts
-  notes/                  Short notes
-  tags/                   Optional tag descriptions
   cv/                     CV PDF and link labels
-  site/                   Site title, navigation, social links, and branding
-  templates/              Copyable paper examples (not published)
+  site/index.json         Site title, navigation, social links, and section introductions
 ```
-
-The `index.md` directly inside `research/`, `projects/`, `art/`, or `blog/` controls that section's introduction. Individual works go in their own subfolders.
 
 ## Add a project, research entry, or artwork
 
-1. Copy an existing entry folder into the appropriate section, such as `research/your-study/`.
-2. Edit its `index.md`. Replace its pictures and downloads with yours.
-3. Run `npm run build` from the repository root to check it.
-
-A minimal entry:
+Make a folder such as `research/your-study/` with an `index.md` and its pictures beside it:
 
 ```markdown
 ---
 title: My project
-description: A short explanation of the work.
 publishDate: "2026-10-12"
-coverImage:
-  src: ./cover.png
-  alt: Describe the cover image.
+summary: One short line for the card and link previews.
+cover: ./cover.png
 ---
 
 Write about the work here.
 
 ![Describe the image.](./figure.png)
-
-[Download the paper](./paper.pdf)
 ```
 
-Keep each entry's images, PDFs, and other attachments beside `index.md`. The folder chooses the section: there is no `kind` field to maintain. Use lowercase folder names with hyphens; folder names must be unique across Research, Projects, and Art. `featured: true` puts a project first in the Projects list.
+Optional fields:
 
-Existing article addresses are preserved: all three sections use `/projects/<folder-name>/`. Moving an entry between those sections keeps its URL. An optional `slug: old-folder-name` preserves its address if you rename its folder. Keep the selected-work ID in `home/index.md` consistent with that slug.
+- `authors`, `affiliation`: shown under the title. Authors default to Gabriel I. Alonso.
+- `type`: the label on its card, such as `Research poster`. Defaults to Research essay, Project, or Art & animation.
+- `abstract`: shows an abstract under the title and numbers the sections.
+- `pdf: ./paper.pdf`: adds a download link.
+- `featured: true`: puts the work first in its list.
 
-Markdown images are optimized automatically. Use Markdown links such as `./paper.pdf` for nearby downloads. Optional `pdf: ./paper.pdf` adds a download button to an article. In MDX, import local figures (for example, `import plot from "./plot.svg?url"`) and pass them to `Figure`; SVGs need explicit width and height. Use public page URLs when linking to another article.
+The folder chooses the section. Use lowercase folder names with hyphens, unique across Research, Projects, and Art. Every work lives at `/projects/<folder-name>/`, so moving it between sections keeps its URL; `slug: old-folder-name` keeps the address if you rename the folder.
 
-## Write a post or note
+Images open full screen with zoom when clicked. Use `./paper.pdf`-style links for nearby downloads. A YouTube link on its own line becomes a player. `::github{repo="owner/name"}` and `::link{url="https://…" label="Playable example"}` on their own lines become link cards.
 
-Posts go in `blog/my-post/index.md` (or `.mdx`) with `title`, `description`, and `publishDate`. Optional fields include `tags`, `coverImage`, and `draft: true`. Draft posts and their attachment folders are omitted from production. `unlisted: true` keeps a post publicly accessible at its URL, but excludes it from Blog and RSS and adds noindex metadata. Work in Research, Projects, and Art is public as soon as it is added.
+## Write a blog post
 
-Notes go in `notes/my-note/index.md`. Use a full date with a timezone, such as `publishDate: "2026-10-12T12:00:00-06:00"`. Blog and RSS automatically collect posts, research essays, and notes. The existing unlisted paper and Markdown examples remain available.
+Posts go in `blog/my-post/index.md` with `title`, `description`, and `publishDate`, plus any optional field above. `draft: true` hides a post in production; `unlisted: true` keeps it reachable by URL but out of Blog and RSS.
 
 ## Update the homepage, biography, or CV
 
-- `home/index.md`: change the introduction or edit `selected`. Each selected item contains its folder ID plus a short card title and description.
-- `about/index.md`: edit the biography using ordinary Markdown.
-- `cv/Gabriel_Isaac_Alonso_Serrato_CV.pdf`: replace this file to update your CV. Keeping its filename preserves existing bookmarks. Labels live in `cv/index.md`.
-- `site/index.json`: edit the site-wide name, metadata, navigation, and social links.
-- Section introductions: edit the `index.md` directly inside each section.
+- `home/index.md`: the introduction and the `selected` work, each with its folder ID and a short card title and description.
+- `about/index.md`: the biography, in ordinary Markdown.
+- `cv/Gabriel_Isaac_Alonso_Serrato_CV.pdf`: replace this file to update your CV. Labels live in `cv/index.md`.
+- `site/index.json`: site name, metadata, navigation, social links, and the Research, Projects, Art, and Blog introductions under `sections`.
 
-Local files with supported media/download extensions in published folders are public, including unlinked files. Markdown sources, JSON configuration, hidden files, and templates are not copied to the public website. Supported downloads include PDFs, images, PowerPoint, CSV, text, BibTeX, ZIP, audio, and video.
-
-`site/asset-aliases.json` preserves the old CV, logo, social-card, and example-figure URLs. It normally needs no edits. If you intentionally rename one of those files, update its target there too.
-
-For advanced paper layouts, math, figures, and page breaks, see the repository README and `templates/`.
+Media and downloads in published folders are public, including unlinked files. Markdown sources, JSON configuration, and hidden files are not. `site/asset-aliases.json` keeps old CV, logo, and social-card URLs working; it normally needs no edits.

@@ -1,12 +1,8 @@
 ---
-featured: false
 title: "Behavioral Deplasticization Animation"
-description: "A 3D short created in Spline 3D and Adobe Premiere to visualize the concept of behavioral deplasticization and promote environmental awareness"
 summary: "A short film in Spline."
 publishDate: "15 Jul 2025"
-coverImage:
-  src: "./cover.png"
-  alt: "Behavioral Deplasticization 3D animation cover"
+cover: ./cover.png
 ---
 
 ## Overview  

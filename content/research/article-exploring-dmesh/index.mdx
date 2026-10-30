@@ -1,0 +1,143 @@
+---
+featured: true
+title: "From Triangles to Gradients: Exploring DMesh++"
+authors: ["Gabriel I. Alonso", "Amruth Srivathsan"]
+affiliation: "MIT Summer Geometry Initiative (SGI 2025), mentored by Yi Zhou of Adobe Research"
+publishDate: "26 Sep 2025"
+summary: "Differentiable meshing."
+cover: ./cover-bouquet.png
+---
+
+import Figure from "@/components/paper/Figure.astro";
+import teaser from "./teaser.jpg";
+import representation from "./representation.png";
+import speed from "./speed.png";
+import playgroundDemo from "./playground-demo.gif?url";
+import mesh from "./mesh.svg?url";
+import descent from "./descent.svg?url";
+import minimumBall from "./minimum-ball.svg?url";
+
+<Figure id="fig-teaser" number={1} wide src={teaser} alt="DMesh++ reconstructions: a 2D leaf drawing from a point cloud, a 3D protein-like shape, and a 3D flower pot from multiple views.">
+  DMesh++ reconstructs meshes from 2D point clouds, 3D point clouds and multi-view images. Figure from Son et al., [DMesh++](https://sonsang.github.io/dmesh2-project/).
+</Figure>
+
+## Introduction
+
+This article introduces Differentiable Mesh++ (DMesh++), exploring what a mesh is, why discrete mesh connectivity blocks gradient flow, how probabilistic faces restore differentiability, and how a local, GPU-friendly tessellation rule replaces a global weighted Delaunay step. We close with a practical optimization workflow and representative applications.
+
+## What is a mesh?
+
+A triangle mesh combines geometry and topology. Geometry is given by vertex coordinates (named points in space such as A, B, C and D), while topology specifies which vertices are connected by edges and which triplets form triangular faces (e.g., ABC, ACD). Together, these define shape and structure in a compact representation suitable for rendering and computation on complex surfaces.
+
+<Figure id="fig-mesh" number={2} src={mesh} maxWidth={560} width={720} height={380} alt="A square of four vertices A, B, C and D split by the diagonal AC into two triangles, ABC and ACD.">
+  Four vertices A, B, C and D and two faces, ABC and ACD.
+</Figure>
+
+## Why traditional meshes fight gradients
+
+Classical connectivity is discrete: a triangle either exists or it does not. Gradient-based learning, however, requires smooth changes. When connectivity flips on or off, derivatives vanish or become undefined through those choices, preventing gradients from flowing across topology changes and limiting end-to-end optimization.
+
+## Differentiable meshes
+
+Gradients are essential for learning-based pipelines, where losses may be defined in image space, perceptual space or 3D metric space.
+
+Differentiable formulations make it possible to propagate error signals from rendered observations or physical constraints back to vertex positions, enabling tasks such as inverse rendering, shape optimization and end-to-end 3D reconstruction. This bridges the gap between discrete geometry and continuous optimization, allowing mesh-based representations to function as both modeling primitives and trainable structures.
+
+<Figure id="fig-descent" number={3} src={descent} maxWidth={560} width={720} height={380} alt="A loss curve with points stepping down its left side toward the minimum.">
+  Gradient descent: each step moves the parameters toward lower loss.
+</Figure>
+
+## How DMesh++ works
+
+DMesh++ makes meshing a differentiable, GPU-native step. Each point carries learnable features: its position, a "realness" score $\psi$, and optional channels.
+
+A soft tessellation function turns any triplet into a triangle weight rather than a hard on/off face.
+
+During training, losses back-propagate to both positions and features, so connectivity can evolve smoothly.
+
+<Figure id="fig-representation" number={4} wide src={representation} alt="Left, a point cloud of N points, each with position, weight and realness. Right, the bunny mesh of M faces, each a triplet of point indices with an existence probability.">
+  The representation: N points with position, weight and realness become M faces, each with an existence probability. Figure from Son et al., [DMesh++](https://sonsang.github.io/dmesh2-project/).
+</Figure>
+
+## The "one-line" idea in DMesh++
+
+In DMesh++, we replace the weighted Delaunay triangulation ($\Lambda_{\text{wdt}}$) of the original DMesh with a local Minimum-Ball test ($\Lambda_{\min}$) when scoring each candidate face. Instead of rebuilding a global structure, we only check the smallest ball touching the face's vertices and see if any other point lies inside it. This can be done quickly with a $k$-nearest-neighbor search on the GPU. The face probability is now:
+
+$$
+\Lambda(F) = \Lambda_{\min}(F)\,\Lambda_{\text{real}}(F).
+$$
+
+- $\Lambda_{\min}(F)$ says, "Is this face even eligible as part of a good tessellation?" (now via the Minimum-Ball test)
+- $\Lambda_{\text{real}}(F)$ says, "Is this face on the real surface?" (a differentiable min over the per-point realness $\psi$)
+
+This swap reduces the effective evaluation cost from $O(N)$ (WDT) to $O(\log N)$ with $k$-NN and parallelization, in practice achieving speeds up to 16× faster in 2D and 32× faster in 3D, with significant memory savings.
+
+<Figure id="fig-speed" number={5} wide src={speed} alt="Two plots of time against number of points, 2D and 3D. DMesh grows steeply past 10,000 points while DMesh++ stays nearly flat.">
+  Time to evaluate faces as the number of points grows, for DMesh and DMesh++. Figure from Son et al., [DMesh++](https://sonsang.github.io/dmesh2-project/).
+</Figure>
+
+## Minimum-Ball, explained
+
+Pick a candidate face $F$ (a segment in 2D, a triangle in 3D). Compute its minimum bounding ball $B_F$: the smallest ball that touches all vertices of $F$.
+
+Now check: is any other point strictly inside that ball? If no, $F$ passes. If yes, reject. That is the Minimum-Ball condition. (It is a subset of Delaunay, so you inherit good triangle quality and avoid self-intersections.)
+
+<Figure id="fig-minimum-ball" number={6} wide src={minimumBall} maxWidth={720} width={900} height={380} alt="Two segments F, each with its smallest enclosing circle. On the left the nearest point p lies outside the circle and F is kept; on the right p lies inside and F is rejected.">
+  The Minimum-Ball condition for a segment. Left: the nearest other point lies outside $B_F$, so $F$ is kept. Right: a point falls inside, so $F$ is rejected.
+</Figure>
+
+DMesh++ makes this soft and differentiable. It computes a signed distance between $B_F$ and the nearest other point, using the ball's center $B_F^c$ and radius $B_F^r$,
+
+$$
+d(B_F, \mathbb{P}) = \min_{p \in \mathbb{P} \setminus F} \lVert p - B_F^c \rVert - B_F^r,
+$$
+
+and runs it through a sigmoid $\sigma$ with sharpness $\alpha_{\min}$ to get $\Lambda_{\min}$:
+
+$$
+\Lambda_{\min}(F) = \sigma\big(\alpha_{\min}\, d(B_F, \mathbb{P})\big).
+$$
+
+## Minimum-Ball playground
+
+Click on the canvas to drop points. Every pair of points becomes a candidate edge $F$. We draw the minimum ball $B_F$ (the smallest circle touching the two endpoints) and compute a soft eligibility via a sigmoid of its clearance to the nearest third point. Drag a point to move it, and hover an edge to see its ball and the nearest point.
+
+<Figure id="fig-playground-demo" number={7} src={playgroundDemo} width={960} height={576} alt="An animation of the playground: eight points are clicked in one by one, and green edges with their faint, empty minimum circles appear between them. One edge is inspected: its ball is empty, so it is kept. A point is then dragged inside that ball, which turns red and rejects the edge, and dragged back out, which restores it.">
+  The playground in use. Moving a point inside an edge's minimum ball rejects that edge.
+</Figure>
+
+::link{url="https://editor.p5js.org/arthifact/full/icNJZfxEy" label="Minimum-Ball playground"}
+
+Because faces are probabilistic, the topology can change cleanly during optimization. You don't hand-edit connectivity; it emerges from the features.
+
+## Recap: a practical optimization workflow
+
+1. **Start:** begin with points (positions and realness $\psi$).
+2. **Candidates:** form nearby faces (via $k$-NN).
+3. **Minimum-Ball:** for each face, find the smallest ball touching its vertices (if no point is inside, it is valid). This gives $\Lambda_{\min}$.
+4. **Weight by realness:** multiply by the vertices' $\psi$ to get the final probability $\Lambda = \Lambda_{\min} \times \Lambda_{\text{real}}$.
+5. **Optimize:** compute the loss (e.g., Chamfer) and back-propagate to update the points and $\psi$.
+6. **Output:** keep the high-$\Lambda$ faces as the final differentiable mesh.
+
+The DMesh++ authors show this workflow reconstructing the flower pot from Figure 1 out of multi-view images:
+
+[3D reconstruction from multi-view images using DMesh++](https://www.youtube.com/watch?v=7vulVAWpTc0)
+
+## Some applications of DMesh++
+
+DMesh++ demonstrates how differentiable meshes can power real applications. Here are some ideas:
+
+- **Generative design:** train models that evolve shapes and topology for creative or engineering tasks without manual remeshing.
+- **Adaptive level of detail:** automatically refine or simplify geometry based on learning signals or rendering needs.
+- **Feature-aware reconstruction:** learn geometric structure, merge fragments or fill missing regions directly through optimization.
+- **Neural simulation:** enable physics or visual simulations where mesh shape and motion are optimized end-to-end with gradients.
+
+## Future directions
+
+Looking ahead, future work on DMesh++ could focus on improving usability and scalability, for example by developing more accessible APIs, real-time visualization tools and integration with common 3D software. On the algorithmic side, enhancing the tessellation functions for higher precision and stability, expanding support for non-manifold and hybrid volumetric surfaces, and further optimizing GPU kernels for large-scale datasets could make differentiable meshing faster, more robust and easier to adopt across geometry processing, simulation and machine learning workflows.
+
+Our work was carried out under the mentorship of Yi Zhou from Adobe Research, whose guidance was instrumental and very much appreciated. We also thank Sanghyun Son, the first author of the original [DMesh](https://sonsang.github.io/dmesh-project/) and [DMesh++](https://sonsang.github.io/dmesh2-project/), for generously sharing his insights and providing invaluable input.
+
+::link{url="https://summergeometry.org/sgi2025/dmesh/" label="Original article"}
+
+::link{url="https://sonsang.github.io/dmesh2-project/" label="DMesh++ paper"}

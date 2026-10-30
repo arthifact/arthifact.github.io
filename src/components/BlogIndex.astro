@@ -1,37 +1,24 @@
 ---
-import { pageContent } from "@/data/pages";
-const { data: page } = await pageContent("blog");
-import { getCollection } from "astro:content";
+import { sectionPage } from "@/data/pages";
+const page = sectionPage("blog");
 import { getAllPosts } from "@/data/post";
 import PageIntro from "@/components/PageIntro.astro";
-const posts = (await getAllPosts()).sort(
-  (a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime(),
-);
-const notes = (await getCollection("note")).sort(
-  (a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime(),
-);
-const entries = [
-  ...posts.map((p) => ({
+const entries = (await getAllPosts())
+  .sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime())
+  .map((p) => ({
     title: p.data.title,
     description: p.data.description,
     date: p.data.publishDate,
     kind: "Blog",
     href: `/posts/${p.id}/`,
-  })),
-  ...notes.map((p) => ({
-    title: p.data.title,
-    description: p.data.description,
-    date: p.data.publishDate,
-    kind: "Note",
-    href: `/notes/${p.id}/`,
-  })),
-].sort((a, b) => b.date.getTime() - a.date.getTime());
+  }));
 ---
 
 <PageIntro
   title={page.title}
 />
 <div class="writing-list">
+  {entries.length === 0 && <p class="writing-empty">No posts yet.</p>}
   {
     entries.map((entry) => (
       <article class="writing-row">

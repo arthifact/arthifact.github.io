@@ -7,10 +7,7 @@ import { formatPaperPages } from "@/utils/paper";
 import BaseLayout from "./Base.astro";
 import TypedTitle from "@/components/TypedTitle.astro";
 interface Props {
-  post:
-    | CollectionEntry<"post">
-    | CollectionEntry<"project">
-    | CollectionEntry<"note">;
+  post: CollectionEntry<"post"> | CollectionEntry<"project">;
 }
 const { post } = Astro.props;
 // The Markdown loader can log a rendering error and retain an entry without HTML.
@@ -24,16 +21,15 @@ const {
   description,
   publishDate,
   authors,
-  format,
   abstract,
   affiliation,
   pdf,
-  numberedSections,
   columns,
+  updatedDate,
 } = post.data;
+// An abstract makes the page a paper with numbered sections.
+const isPaper = !!abstract;
 const unlisted = "unlisted" in post.data && post.data.unlisted;
-const updatedDate =
-  "updatedDate" in post.data ? post.data.updatedDate : undefined;
 const ogImage = "ogImage" in post.data ? post.data.ogImage : undefined;
 const kind = "kind" in post.data ? post.data.kind : "blog";
 const backLink =
@@ -55,10 +51,11 @@ const backLabel =
 const articleDate = publishDate.toISOString();
 const pages = formatPaperPages(
   await Astro.slots.render("default"),
-  numberedSections,
+  isPaper,
   columns,
 );
 const hasMath = pages.some((content) => /class="[^"]*\bkatex\b/.test(content));
+const hasImages = pages.some((content) => /<img\b/.test(content));
 ---
 
 <BaseLayout
@@ -80,7 +77,7 @@ const hasMath = pages.some((content) => /class="[^"]*\bkatex\b/.test(content));
       "paper",
       "paper-editorial",
       {
-        "paper-manuscript": format === "paper",
+        "paper-manuscript": isPaper,
         "paper-reading": columns === 1,
         "paper-columned": columns === 2,
       },
@@ -158,4 +155,89 @@ const hasMath = pages.some((content) => /class="[^"]*\bkatex\b/.test(content));
   <div class="article-bottom">
     <a href={backLink}>← Back to {backLabel.toLowerCase()}</a>
   </div>
+  {
+    hasImages && (
+      <dialog class="image-viewer" aria-label="Image viewer">
+        <div class="image-viewer-stage" />
+
+        <div class="image-viewer-bar">
+          <button type="button" data-zoom>Zoom in</button>
+          <a data-original target="_blank" rel="noopener">Original</a>
+          <button type="button" data-close>Close</button>
+        </div>
+      </dialog>
+      <script is:inline>
+        // Click an article image to open it full screen. Click it again, or press Zoom,
+        // to zoom in at that point; scroll or drag to look around. Esc closes.
+        // Without JavaScript, figures still open the original in a new tab.
+        (() => {
+          const viewer = document.querySelector(".image-viewer");
+          const stage = viewer.querySelector(".image-viewer-stage");
+          const image = stage.appendChild(new Image());
+          image.draggable = false;
+          const zoomButton = viewer.querySelector("[data-zoom]");
+          const original = viewer.querySelector("[data-original]");
+          let drag = null;
+          let dragged = false;
+
+          const zoom = (on, x = innerWidth / 2, y = innerHeight / 2) => {
+            const box = image.getBoundingClientRect();
+            const fx = (x - box.left) / box.width;
+            const fy = (y - box.top) / box.height;
+            image.style.width = on ? `${Math.max(image.naturalWidth, box.width * 2)}px` : "";
+            viewer.classList.toggle("zoomed", on);
+            zoomButton.textContent = on ? "Zoom out" : "Zoom in";
+            if (on) stage.scrollTo(fx * image.offsetWidth - x, fy * image.offsetHeight - y);
+          };
+
+          // Give every viewable image a frame that carries the corner zoom icon.
+          for (const img of document.querySelectorAll(".article-prose img")) {
+            if (img.closest("a")) continue;
+            const frame = document.createElement("span");
+            frame.className = "zoomable";
+            img.replaceWith(frame);
+            frame.append(img);
+          }
+          for (const frame of document.querySelectorAll(".article-prose :is(.zoomable, a.figure-image)"))
+            frame.insertAdjacentHTML("beforeend", '<span class="zoom-hint" aria-hidden="true"></span>');
+
+          document.addEventListener("click", (event) => {
+            if (!event.target.closest(".article-prose")) return;
+            const link = event.target.closest("a.figure-image");
+            const img = (link || event.target.closest(".zoomable"))?.querySelector("img");
+            if (!img) return;
+            event.preventDefault();
+            image.src = link ? link.href : img.currentSrc || img.src;
+            image.alt = img.alt;
+            original.href = image.src;
+            zoom(false);
+            viewer.showModal();
+          });
+          image.addEventListener("click", (event) => {
+            if (!dragged) zoom(!viewer.classList.contains("zoomed"), event.clientX, event.clientY);
+          });
+          zoomButton.addEventListener("click", () => zoom(!viewer.classList.contains("zoomed")));
+          viewer.querySelector("[data-close]").addEventListener("click", () => viewer.close());
+          stage.addEventListener("click", (event) => {
+            if (event.target === stage && !dragged) viewer.close();
+          });
+          stage.addEventListener("pointerdown", (event) => {
+            dragged = false;
+            if (event.pointerType === "mouse" && viewer.classList.contains("zoomed"))
+              drag = { x: event.clientX, y: event.clientY, left: stage.scrollLeft, top: stage.scrollTop };
+          });
+          addEventListener("pointermove", (event) => {
+            if (!drag) return;
+            const dx = event.clientX - drag.x;
+            const dy = event.clientY - drag.y;
+            if (Math.abs(dx) + Math.abs(dy) > 4) dragged = true;
+            stage.scrollTo(drag.left - dx, drag.top - dy);
+          });
+          addEventListener("pointerup", () => {
+            drag = null;
+          });
+        })();
+      </script>
+    )
+  }
 </BaseLayout>

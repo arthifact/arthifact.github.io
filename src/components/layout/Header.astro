@@ -15,7 +15,6 @@ if (pathname.startsWith("/projects/") && pathname !== "/projects/") {
   if (project?.data.kind === "research") activePath = "/research/";
   if (project?.data.kind === "art") activePath = "/art/";
 }
-if (pathname.startsWith("/notes/")) activePath = "/blog/";
 const isCurrent = (path: string) =>
   path === "/"
     ? pathname === "/"

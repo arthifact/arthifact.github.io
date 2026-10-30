@@ -1,5 +1,5 @@
 ---
-import { pageContent } from "@/data/pages";
+import { sectionPage } from "@/data/pages";
 import { getCollection } from "astro:content";
 import PageIntro from "@/components/PageIntro.astro";
 import WorkCard from "@/components/WorkCard.astro";
@@ -11,7 +11,7 @@ const projects = (
     Number(b.data.featured) - Number(a.data.featured) ||
     b.data.publishDate.getTime() - a.data.publishDate.getTime(),
 );
-const { data: page } = await pageContent("projects");
+const page = sectionPage("projects");
 ---
 
 <PageLayout meta={page}>

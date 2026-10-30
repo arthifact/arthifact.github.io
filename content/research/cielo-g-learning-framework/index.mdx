@@ -1,0 +1,56 @@
+---
+title: "Gaming to Better the Earth: A Community-Centered Framework for Earth Science Education Through Game Design"
+authors: ["Gabriel I. Alonso", "Aaron Velasco", "Katalina Salas", "Marc Garcia"]
+affiliation: "University of Texas at El Paso, Department of Computer Science and Department of Earth, Environmental and Resource Sciences"
+publishDate: "1 Nov 2025"
+summary: "Game design for Earth Science learning."
+type: "Research project"
+cover: ./cover.png
+---
+
+import Figure from "@/components/paper/Figure.astro";
+import gameplay from "./gameplay.gif?url";
+import characters from "./characters.png";
+import poster from "./poster.webp";
+
+In 2025 I joined [CIELO-G](https://www.cielog.org/) (Community-Driven Inclusive Excellence and Leadership Opportunities in the Geosciences), an NSF-funded geoscience program at the University of Texas at El Paso (Award #: 2228180). My research project there became CIELO-G Learning, named in honor of the program: an open source Godot framework that lets educators build Earth science games about their own communities without writing code, and lets researchers study how students learn through play. Its first module, Journey Into Earthquake Science, was presented at SACNAS NDiSTEM and the AGU annual meeting.
+
+## The problem
+
+Climate change, natural disasters and resource management all call for stronger geoscience literacy, yet Earth science in grades 6–12 often has limited curricula and few local, hands-on tools to keep students engaged. A single game about one place can help, but it does not scale. So instead of making one game, we asked how to build a framework that connects Earth science topics to each community's context, while improving engagement, motivation, accessibility and learning outcomes.
+
+## How a lesson works
+
+A lesson starts with characters who explain the topic in short dialogue, with expressions, sound and animated backgrounds. Then students practice with minigames:
+
+- **Clickable:** pick the right answer, or select all that apply.
+- **Drag and drop:** sort items into the right zones.
+- **Mix and match:** connect related ideas or terms.
+
+Every answer gets immediate feedback, and students can retry until they get it. Finishing every minigame on the first try earns a personalized certificate.
+
+<Figure id="fig-gameplay" number={1} src={gameplay} width={960} height={540} alt="An animation of Journey Into Earthquake Science: the home screen with Learn and Play buttons, a character in a hard hat explaining how rocks break apart, a drag-and-drop minigame matching fault diagrams to normal, reverse and strike-slip faults, and a select-all question about the direct effects of earthquakes.">
+  Journey Into Earthquake Science, the first module: the home screen, a character explaining faults, and two minigames.
+</Figure>
+
+## The framework
+
+The design follows seven game principles: goals, feedback, challenge, reward, interaction, story and aesthetics. To make a new lesson, an educator edits a single folder: write the dialogue, copy a minigame example and add it to the list. Characters and their expressions are separate layers, so the same character can react to how the student is doing.
+
+<Figure id="fig-characters" number={2} src={characters} maxWidth={560} alt="Three illustrated characters side by side: a boy with a safety vest smiling, a girl in an orange hard hat with a neutral face, and a woman in a green jacket looking worried.">
+  The framework's characters, drawn by me. Each face is a swappable expression layer.
+</Figure>
+
+The framework is written in Godot 4.5 and runs on the web, phones and low-end computers. The code is open source under the MIT License, so any school or community group can adapt it.
+
+## The poster
+
+This is the poster we presented at both conferences.
+
+<Figure id="fig-poster" number={3} wide src={poster} alt="Research poster: Gaming to Better the Earth, a community-centered framework for Earth science education through game design.">
+  The research poster, Gaming to Better the Earth.
+</Figure>
+
+::link{url="https://arthifact.itch.io/journey-into-earthquake-science" label="Playable example"}
+
+::github{repo="arthifact/CIELO-G-Learning-Framework"}

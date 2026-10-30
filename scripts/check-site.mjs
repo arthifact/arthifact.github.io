@@ -141,120 +141,30 @@ check(
 );
 const feed = fs.readFileSync(path.join(root, "rss.xml"), "utf8");
 check(
-  feed.includes("DMesh++") && feed.includes("earth_layers"),
-  "RSS must include the writing shown in the blog.",
+  feed.includes("DMesh++") && feed.includes("Gaming to Better the Earth"),
+  "RSS must include the research writing.",
+);
+const paperPage = "projects/cielo-g-learning-framework/index.html";
+const example = fs.readFileSync(path.join(root, paperPage), "utf8");
+check(
+  example.includes("paper-reading"),
+  "Articles must use the single-column paper layout.",
 );
 check(
-  !feed.includes("markdown-elements") && !feed.includes("paper-example"),
-  "The layout samples must stay out of RSS.",
-);
-const example = fs.readFileSync(
-  path.join(root, "posts/paper-example/index.html"),
-  "utf8",
-);
-check(
-  example.includes('content="noindex, follow"'),
-  "Paper example must retain its noindex metadata.",
-);
-check(
-  (example.match(/class="section-number"/g) || []).length === 5,
-  "Paper example must have five numbered sections, without numbering footnotes.",
-);
-check(
-  (example.match(/<figcaption id="(?:fig|table)-[^\"]+"/g) || []).length === 4,
-  "Paper example needs three figure captions and one table caption.",
-);
-check(
-  example.includes('aria-labelledby="table-errors-caption"') &&
-    example.includes('scope="col"'),
-  "Paper table must retain native headers and a labelled scroll region.",
-);
-check(
-  example.includes("data-math-styles") && example.includes("expressive-code"),
-  "Paper example must demonstrate math and highlighted code.",
-);
-check(
-  example.includes("srcset=") && example.includes("paper-wide"),
-  "Paper example must demonstrate responsive images and wide figures.",
-);
-check(
-  example.includes("paper-reading") && !example.includes('class="paper-columns"'),
-  "Paper example must use a single reading column.",
-);
-check(
-  !example.includes("paper-figure-side") &&
-    example.includes("figure-grid") &&
-    !example.includes("figure-grid-lead"),
-  "Paper example must keep captions below equal-width image panels.",
-);
-check(
-  example.includes('class="paper-block"'),
-  "Paper example must keep the code section together in one column.",
-);
-check(
-  (example.match(/class="paper-page"/g) || []).length === 2 &&
-    example.includes('aria-label="Page 2 of 2"') &&
-    !example.includes("data-paper-break"),
-  "Paper example must have two labelled sheets with consumed page breaks.",
-);
-const exampleHeadings = [];
-visit(fromHtml(example), "element", (node) => {
-  if (node.tagName === "h2") exampleHeadings.push(node.properties.id);
-  if (node.properties.className?.includes("paper-columns")) {
-    let headings = 0;
-    visit(node, "element", (child) => {
-      if (child.tagName === "h2") headings++;
-      check(
-        !child.properties.className?.includes("paper-wide"),
-        "Wide figures must sit outside the text column flow.",
-      );
-    });
-    check(
-      headings >= 2,
-      "Successive sections must share the same column flow.",
-    );
-  }
-  if (!node.properties.className?.includes("figure-grid")) return;
-  visit(node, "element", (child) => {
-    check(
-      !/^h[1-6]$/.test(child.tagName),
-      "The example must pair images without introducing competing text sections.",
-    );
-  });
-});
-check(
-  exampleHeadings.join(",") ===
-    "introduction,method,results,writing-a-paper,code,footnote-label" &&
-    example.indexOf('id="table-errors"') < example.indexOf('id="code"'),
-  "The example must preserve the authored section order and place the results table before code.",
+  example.includes('class="image-viewer"') &&
+    !/<script\b[^>]+src=/.test(example),
+  "Article images must open in the inline full-screen viewer.",
 );
 check(
   gzipSync(example).length < 12 * 1024,
-  "Paper example must stay below 12 KiB of compressed HTML.",
+  "Paper pages must stay below 12 KiB of compressed HTML.",
 );
-const exampleScripts = [
-  ...example.matchAll(/<script\b[^>]+src="([^"]+)"[^>]*>/g),
-];
-check(
-  exampleScripts.length <= 1,
-  "Paper example may use only the small code accessibility helper.",
-);
-for (const script of exampleScripts) {
-  const file = resolveTarget(
-    script[1],
-    path.join(root, "posts/paper-example/index.html"),
-  )?.file;
-  check(
-    !!file && gzipSync(fs.readFileSync(file)).length < 1024,
-    "Paper example's accessibility helper must stay below 1 KiB compressed.",
-  );
-}
 const paperCssHref = example.match(
   /<link[^>]+href="([^"]+)"[^>]+data-paper-styles/,
 )?.[1];
 const paperCssPath =
   paperCssHref &&
-  resolveTarget(paperCssHref, path.join(root, "posts/paper-example/index.html"))
+  resolveTarget(paperCssHref, path.join(root, paperPage))
     ?.file;
 check(!!paperCssPath, "Article typography stylesheet must be local.");
 if (paperCssPath) {
@@ -270,11 +180,6 @@ if (paperCssPath) {
     );
   }
 }
-const sitemap = fs.readFileSync(path.join(root, "sitemap-0.xml"), "utf8");
-check(
-  !sitemap.includes("paper-example"),
-  "Paper example must stay out of the sitemap.",
-);
 check(
   fs.existsSync(path.join(root, "files/Gabriel_Isaac_Alonso_Serrato_CV.pdf")),
   "CV must remain available.",

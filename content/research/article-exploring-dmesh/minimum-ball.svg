@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 380" width="900" height="380" font-family="Georgia, 'Times New Roman', serif">
+  <rect width="900" height="380" fill="#faf9f6"/>
+  <line x1="450" y1="40" x2="450" y2="340" stroke="#deded4" stroke-width="1.5"/>
+  <g>
+    <circle cx="225" cy="180" r="110" fill="#dbe2ce" fill-opacity="0.55" stroke="#4c6246" stroke-width="2" stroke-dasharray="7 6"/>
+    <line x1="115" y1="180" x2="335" y2="180" stroke="#252722" stroke-width="3"/>
+    <circle cx="115" cy="180" r="9" fill="#252722"/><circle cx="335" cy="180" r="9" fill="#252722"/>
+    <circle cx="380" cy="70" r="9" fill="#4c6246"/>
+    <line x1="225" y1="180" x2="380" y2="70" stroke="#64675e" stroke-width="1.5" stroke-dasharray="3 5"/>
+    <text x="210" y="208" font-size="20" font-style="italic" fill="#252722">F</text>
+    <text x="96" y="92" font-size="19" font-style="italic" fill="#4c6246">B<tspan font-size="13" dy="5">F</tspan></text>
+    <text x="392" y="66" font-size="19" font-style="italic" fill="#4c6246">p</text>
+    <text x="110" y="335" font-size="18" fill="#4c6246">No point inside: F is kept</text>
+  </g>
+  <g>
+    <circle cx="675" cy="180" r="110" fill="#f2dcd6" fill-opacity="0.6" stroke="#b5534a" stroke-width="2" stroke-dasharray="7 6"/>
+    <line x1="565" y1="180" x2="785" y2="180" stroke="#252722" stroke-width="3"/>
+    <circle cx="565" cy="180" r="9" fill="#252722"/><circle cx="785" cy="180" r="9" fill="#252722"/>
+    <circle cx="700" cy="120" r="9" fill="#b5534a"/>
+    <text x="660" y="208" font-size="20" font-style="italic" fill="#252722">F</text>
+    <text x="546" y="92" font-size="19" font-style="italic" fill="#b5534a">B<tspan font-size="13" dy="5">F</tspan></text>
+    <text x="714" y="116" font-size="19" font-style="italic" fill="#b5534a">p</text>
+    <text x="548" y="335" font-size="18" fill="#b5534a">A point inside: F is rejected</text>
+  </g>
+</svg>

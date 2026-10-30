@@ -9,7 +9,6 @@ export const GET = async () => {
     "project",
     ({ data }) => data.kind === "research",
   );
-  const notes = await getCollection("note");
   const items = [
     ...posts.map((p) => ({
       title: p.data.title,
@@ -22,12 +21,6 @@ export const GET = async () => {
       description: p.data.description,
       pubDate: p.data.publishDate,
       link: `projects/${p.id}/`,
-    })),
-    ...notes.map((p) => ({
-      title: p.data.title,
-      description: p.data.description,
-      pubDate: p.data.publishDate,
-      link: `notes/${p.id}/`,
     })),
   ].sort((a, b) => b.pubDate.getTime() - a.pubDate.getTime());
   return rss({
