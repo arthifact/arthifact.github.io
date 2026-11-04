@@ -1,6 +1,6 @@
 # Gabriel I. Alonso — portfolio
 
-A static research and creative portfolio at [arthifact.com](https://arthifact.com/), built with Astro: a paper-like background, serif type, and a homepage of six selected works.
+Research and creative portfolio at [arthifact.com](https://arthifact.com/).
 
 ## Run and verify
 
@@ -14,7 +14,7 @@ npm run build     # build, then check links, images, RSS, the CV and page budget
 npm run preview   # serve the built site
 ```
 
-The index pages (Home, Research, Projects, Art, Blog, About) ship no JavaScript. Article pages carry one small inline script for the full-screen image viewer. Fonts are local; there are no third-party requests on load.
+Only the Article pages carry one small inline script for the full-screen image viewer. Fonts are local; there are no third-party requests on load.
 
 ## Edit
 
