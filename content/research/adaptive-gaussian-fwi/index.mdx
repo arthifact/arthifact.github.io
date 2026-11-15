@@ -1,0 +1,71 @@
+---
+title: "Adaptive Gaussian Parameterization for Multiscale Full-Waveform Inversion"
+authors: ["Gabriel I. Alonso"]
+affiliation: "The University of Texas at El Paso"
+publishDate: "15 Nov 2026"
+summary: "Simple rules choose the smooth seismic model."
+type: "Research project"
+cover: ./cover.png
+---
+
+import Figure from "@/components/paper/Figure.astro";
+import teaser from "./teaser.png";
+import round from "./round.png";
+import errors from "./errors.png";
+import models from "./models.png";
+
+Full-waveform inversion (FWI) makes a picture of the ground from sound. We send waves down, record the echoes at the surface, and search for the velocity map whose simulated echoes match the recorded ones. From a poor starting guess it lines up the wrong wave cycles and gets stuck, so the usual practice is to start with low frequencies, build a smooth *macro model* first, and add detail later.
+
+This project asks one question: **during that smooth stage, can a few rules from statistics, signal processing and wave physics choose how the model is described, instead of a fixed grid?** I build the smooth model out of Gaussians, smooth bumps that are each described by six numbers, and let the rules decide where each one goes, what shape it takes and whether it is worth keeping.
+
+<Figure id="fig-teaser" number={1} wide src={teaser} alt="Six velocity maps of the Overthrust model: the flat starting guess, the best pixel method, a fixed grid of Gaussians at 9 Hz, the adaptive Gaussians at 9 Hz and at 30 Hz, and the true model. Error values are printed on each map.">
+  Overthrust, from a guess that only increases with depth. Pixel FWI barely leaves the start, and a fixed grid of Gaussians recovers part of the structure. The adaptive model finds the thrust sheet at 9 Hz, and ordinary pixel refinement then adds detail. Numbers are velocity error in m/s.
+</Figure>
+
+## The method
+
+The inversion runs in two stages. **Stage 1** (6 and 9 Hz) builds the smooth model from Gaussians. **Stage 2** (13, 20 and 30 Hz) freezes it and refines every 10 m cell with ordinary pixel FWI. Every method I compare uses the same Stage 2, so any difference comes from Stage 1.
+
+Stage 1 starts with no Gaussians. Nine steps out of ten, all Gaussians are fine-tuned together. Every tenth step, six rules decide what to add and what to remove:
+
+1. **Where.** Split the gradient, which says where the velocity should go up or down, into patches that all want the same change. One Gaussian has one sign, so each patch is one candidate.
+2. **Shape.** Give each candidate the centre, stretch and tilt of its patch, so a dipping layer gets a long, tilted Gaussian.
+3. **Smallest size.** Never narrower than a quarter wavelength. At that width a Gaussian keeps under 1% of its strength at the finest detail the band can see, so it cannot invent detail the data cannot check.
+4. **Ranking.** Predict each candidate's gain, corrected for illumination so that patches near the sources do not always win, and test the top six.
+5. **Strength.** Try a small 5% step, fit a parabola, cap at 30%, and keep whichever measured better.
+6. **Keep or remove.** A Gaussian stays only if it lowers the misfit by more than a fixed price $\tau$, and fading ones are removed at the same price.
+
+The price comes from the Bayesian information criterion. With noise variance $\sigma^2$, $n_{\text{eff}}$ independent data samples and six numbers per Gaussian,
+
+$$
+\tau \;\propto\; 6\,\sigma^{2}\ln n_{\text{eff}} .
+$$
+
+It has no tuning knob, it is zero for clean data, and in practice growth stops once the misfit reaches the noise level.
+
+<Figure id="fig-round" number={2} wide src={round} alt="Four panels showing one structure round on Overthrust at 9 Hz: the gradient split into same-sign patches, one ellipse per patch with the top six ranked, the four admitted Gaussians, and the misfit and Gaussian count over both bands.">
+  One real structure round, the first at 9 Hz on Overthrust, replayed with the project code. (a) The gradient is split into same-sign patches. (b) Each patch gives a matching Gaussian, and the six with the largest predicted gain are tested. (c) Four pay the price and are kept. (d) Over both bands the kept misfit falls steadily, and the number of Gaussians levels off near the noise level.
+</Figure>
+
+## Results
+
+I tested four standard synthetic models: Marmousi, Overthrust, BP 2004 and SEAM. Each is a 700 m × 700 m section with five surface sources and noise added to the data, and each run is repeated with three noise patterns. Every method starts from the same guess. The comparisons are plain pixels, smoothed pixels, total-variation pixels and a **fixed grid of Gaussians**, which uses the same bumps on a regular lattice with only their strengths fitted.
+
+<Figure id="fig-errors" number={3} src={errors} alt="Two grouped bar charts of velocity error for the four models, after the smooth stage and after the final stage. Bars show the best pixel method, the fixed grid and the adaptive Gaussians; a black line marks the starting error.">
+  Velocity error, averaged over three noise patterns. Lower is better; the black line is the starting guess.
+</Figure>
+
+- **Pixels stay stuck.** From this start, all three pixel methods end near their starting error. Smoothing and total variation do not fix that.
+- **Adaptive beats fixed after the smooth stage.** It gives the most similar picture to the truth in all 12 cases and the lowest error in 9.
+- **Not just extra computing.** With the same amount of computing, the fixed grid still loses in 10 of 12 cases.
+- **Where it loses.** After the final stage the fixed grid has the lower error in 5 of 12 runs, including all three on SEAM, where the adaptive model finds the salt's shape but underestimates the deep velocity.
+
+<Figure id="fig-models" number={4} wide src={models} alt="A grid of velocity maps for Marmousi, Overthrust, BP 2004 and SEAM, showing the true model, the fixed grid and adaptive models at 9 Hz, and the plain, smoothed, total-variation, fixed and adaptive results at 30 Hz, with error values and the best in each group in bold.">
+  Every method on every model (one noise pattern). Left of the line: smooth models after 9 Hz. Right: final models after 30 Hz. The best error in each group is in bold.
+</Figure>
+
+## What it shows
+
+Letting justified rules choose the building blocks of the smooth model works: it gives a better macro model than a fixed layout in most cases, even at equal computing, and pixel methods cannot match it from a poor start. It is not better everywhere, it costs more simulations in Stage 1, and these tests are small and two-dimensional. Next steps are larger and 3-D models, more sources, field data, and the same rules with building blocks other than Gaussians.
+
+::github{repo="arthifact/adaptive-gaussian-fwi"}
