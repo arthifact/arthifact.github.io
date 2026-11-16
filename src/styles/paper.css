@@ -984,6 +984,50 @@ body:has(.paper-reading) .site-header {
   text-decoration: none;
   cursor: pointer;
 }
+.image-viewer-count {
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  background: #fcfaf8;
+  color: #74676d;
+  font: 11px/1 var(--mono);
+  letter-spacing: 0.08em;
+}
+.image-viewer-count[hidden] {
+  display: none;
+}
+.image-viewer-nav {
+  position: fixed;
+  top: 50%;
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: #fcfaf8;
+  color: #352f31;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+.image-viewer-nav:hover {
+  background: #f0f1e9;
+  color: #4c6246;
+}
+.image-viewer-nav:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+.image-viewer-nav[hidden] {
+  display: none;
+}
+.image-viewer-nav.prev {
+  left: 16px;
+}
+.image-viewer-nav.next {
+  right: 16px;
+}
 .image-viewer-bar :is(button, a):hover {
   background: #f0f1e9;
   color: #4c6246;

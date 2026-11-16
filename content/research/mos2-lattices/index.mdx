@@ -1,0 +1,47 @@
+---
+title: "Exploring Molybdenum Disulfide Molecules"
+affiliation: "Center of Nanoscience and Nanotechnology (CNyN), National Autonomous University of Mexico (UNAM), supervised by Jonathan Guerrero"
+publishDate: "1 Aug 2023"
+summary: "Candidate MoS₂ structures from polygons."
+type: "UNAM"
+cover: ./cover.png
+---
+
+import Figure from "@/components/paper/Figure.astro";
+import lattices from "./lattices.png";
+import candidates from "./candidates.png";
+import results from "./results.png";
+
+<Figure id="fig-lattices" number={1} wide src={lattices} alt="Three panels of a lattice of sulfur atoms in yellow and molybdenum atoms in blue: the plain lattice, a red triangle through three sulfur atoms around a molybdenum atom, and a red hexagon through six sulfur atoms around a centre.">
+  The tool's steps: the atom lattice, a triangle of three sulfur atoms, and a hexagon of six.
+</Figure>
+
+From June to August 2023 I worked at the Center of Nanoscience and Nanotechnology (CNyN) of UNAM with Jonathan Guerrero on the molecular geometry of molybdenum disulfide (MoS₂). This was an introductory project and my first time doing research, so the goal was to develop a small tool to search many possible structures and pick a few worth simulating.
+
+## Problem
+
+MoS₂ is a layered material, and its atoms can be arranged over a lattice in many ways. Each full simulation is expensive, so the goal was an exploration tool that works with any MoS₂ lattice and narrows the candidates down before the heavy computation.
+
+## How it works
+
+The tool was written in Python with NumPy and Matplotlib, is a brute-force search over the lattice:
+
+- **Lattice:** start from a lattice of molybdenum and sulfur atoms.
+- **Try every combination:** go through groups of sulfur atoms and build a triangle or a hexagon around each group's centroid.
+- **Snap to atoms:** move each corner to the nearest real atom, and keep only the shapes that still fit the lattice.
+- **Save:** plot every kept shape and export its coordinates.
+
+<Figure id="fig-candidates" number={2} wide src={candidates} alt="Ten small lattice panels. The top row shows red triangles with corners on sulfur atoms, growing in size and some rotated. The bottom row shows blue hexagons with corners on sulfur atoms, growing in the same way.">
+  Some of the kept shapes: triangles and hexagons of growing size, some rotated, every corner on a sulfur atom.
+</Figure>
+
+## Results
+
+<Figure id="fig-results" number={3} wide src={results} alt="Left, a round patch of the lattice covered by thousands of faint red triangles and blue hexagons, all the candidates drawn at once. Right, a bar chart of the number of candidates for each side length, with triangles at every size and hexagons only up to side 4.">
+  A recreation of the search on a small patch of the lattice: every candidate drawn at once, and how many there are for each size.
+</Figure>
+
+|  |
+| --- |
+| **2,000+** Generated candidate configurations of triangles and hexagons. |
+| **3** Narrowed down the top candidates for supercomputer analysis. |

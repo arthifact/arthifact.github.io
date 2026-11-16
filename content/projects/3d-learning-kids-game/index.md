@@ -5,26 +5,6 @@ publishDate: "6 November 2024"
 cover: ./cover.png
 ---
 
-## Overview
-A 3D educational game made to show how play and interaction can make learning more fun and engaging for kids. It uses a modular design that makes it easy to build and test new learning activities.
+https://youtu.be/2_nAor8yDmA
 
-[Watch the project video on YouTube](https://www.youtube.com/watch?v=2_nAor8yDmA)
-
-## Background
-Built as a prototype to explore how 3D interactive mini-games can help teach different subjects to children.
-
-## Development
-Created with **Godot 4** and **Blender**, using a modular system for multiple mini-games (Playgrounds). Added Firebase for login, progress tracking, and analytics.
-
-## Features
-- General system with drag, drop, and object interactions  
-- Real-time feedback and performance tracking  
-- Colorful 3D visuals optimized for accessibility  
-- Firebase support for data management and analytics  
-
-## Results
-Testing showed strong engagement and learning potential, proving that modular design helps make learning games more flexible and effective.
-
-## Tech Stack
-Godot 4 · Blender · Firebase · GDScript (Python)
-
+A 3D educational game that shows how play can make learning more fun for kids. It is built from small mini-games, called playgrounds, that share one system for dragging, dropping and touching objects, so new activities are quick to make and test. Every answer gets instant feedback, and Firebase handles logins, progress and analytics. Made with Godot 4 and Blender.

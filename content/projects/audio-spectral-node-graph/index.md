@@ -1,18 +1,14 @@
 ---
 title: "Audio Spectral Node Graph"
-summary: "Sound as a node graph."
+summary: "Sound as a graph of moments in a box."
 publishDate: "3 May 2026"
 cover: ./cover.jpg
 ---
 
-## Overview  
-An **audio visualizer** that shows sound as a **node graph**, turning the spectrum of a track into a moving network of points and connections.
+https://youtu.be/-nwQVtRwxxA
 
-[Watch the video on YouTube](https://www.youtube.com/watch?v=-VSl8jyAVs8)
+An audio visualizer that turns a song into a graph of moments. Every node is an instant of sound, placed by its spectrum and linked to the moments around it. A box follows the nodes as the music spreads out and settles, and the camera turns around that box so the whole graph is always in view. Drop in any track and it runs in the browser. This demo plays Cornfield Chase by Hans Zimmer.
 
-[Try it in the browser](https://arthifact.github.io/audio_spectral_node_graph/) · [Code on GitHub](https://github.com/arthifact/audio_spectral_node_graph)
+::link{url="https://arthifact.com/sketches/audio-spectral-node-graph/" label="Try it in the browser"}
 
-## Tracklist  
-- Apashe — Overture  
-- Apashe — Lord & Master  
-- Vladimir Cauchemar — Anthropology  
+::github{repo="arthifact/sketches"}

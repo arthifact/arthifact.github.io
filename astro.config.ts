@@ -13,6 +13,7 @@ import rehypeUnwrapImages from "rehype-unwrap-images";
 import remarkDirective from "remark-directive"; /* Handle ::: directives as nodes */
 import remarkMath from "remark-math";
 import { remarkAdmonitions } from "./src/plugins/remark-admonitions"; /* Add admonitions */
+import { remarkGallery } from "./src/plugins/remark-gallery";
 import { remarkGithubCard } from "./src/plugins/remark-github-card";
 import { remarkYoutubeEmbed } from "./src/plugins/remark-youtube-embed";
 import { remarkContentLinks } from "./src/plugins/remark-content-links";
@@ -46,6 +47,7 @@ export default defineConfig({
         remarkMath,
         remarkContentLinks,
         remarkDirective,
+        remarkGallery,
         remarkGithubCard,
         remarkYoutubeEmbed,
         remarkAdmonitions,

@@ -41,7 +41,7 @@ Optional fields:
 
 The folder chooses the section. Use lowercase folder names with hyphens, unique across Research, Projects, and Art. Every work lives at `/projects/<folder-name>/`, so moving it between sections keeps its URL; `slug: old-folder-name` keeps the address if you rename the folder.
 
-Images open full screen with zoom when clicked. Use `./paper.pdf`-style links for nearby downloads. A YouTube link on its own line becomes a player. `::github{repo="owner/name"}` and `::link{url="https://…" label="Playable example"}` on their own lines become link cards.
+Images open full screen with zoom when clicked. Use `./paper.pdf`-style links for nearby downloads. Images between `:::gallery` and `:::` are shown one at a time with arrows instead of stacked. A YouTube link on its own line becomes a player, and `::video{src="./clip.mp4"}` adds a short silent loop. `::github{repo="owner/name"}` and `::link{url="https://…" label="Play it in the browser"}` on their own lines become cards, and cards next to each other sit side by side. Use them for every repository and outside link instead of a plain link; YouTube links are embedded instead.
 
 ## Write a blog post
 

@@ -5,29 +5,6 @@ publishDate: "13 February 2024"
 cover: ./cover.png
 ---
 
-## Overview  
-A 3D platformer built in **Godot 4** for the **Bandit Game Jam at UTEP**, with five unique levels and player abilities.  
+https://youtu.be/gD_2nbrhXUQ
 
-[Watch the project video on YouTube](https://www.youtube.com/watch?v=gD_2nbrhXUQ)
-
-## Background  
-Created during a weekend jam to experiment with movement systems, level design, and character creation in 3D.  
-The most challenging part was designing, texturing , and animating a **Pikmin-inspired character** in **Blockbench**. All sound effects were recorded using my own voice. 
-
-[Character reference: Nintendo’s Red Pikmin](https://pikmin.nintendo.com/_images/layouts/piklopedia/thumbnails/red-pikmin.png)
-
-## Development  
-Built with **Godot 4**, it has a **dash and stamina system**, **jump pickups**, **moving platforms**, and **collectibles**. Has five custom levels that gradually increase in difficulty.  
-
-## Features  
-- Dash and stamina-based movement  
-- Jump and collectible pickups  
-- Moving and dynamic platforms  
-- Five handcrafted levels  
-- Custom Blockbench character and voice-made sounds  
-
-## Results  
-Delivered a fully playable platformer with a cute character.  
-
-## Tech Stack  
-Godot 4 · GDScript · Blender · Blockbench  
+A 3D platformer made in a weekend for the Bandit Game Jam at UTEP. It has five levels that get harder as you go, with a dash and stamina system, jump pickups, moving platforms and collectibles. The hardest part was the character: a little creature inspired by Nintendo's Pikmin, which I modelled, textured and animated in Blockbench. Every sound effect is my own voice. Made with Godot 4.

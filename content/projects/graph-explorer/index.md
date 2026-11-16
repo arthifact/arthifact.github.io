@@ -5,7 +5,6 @@ publishDate: "13 Oct 2023"
 cover: ./cover.png
 ---
 
-## Overview  
-An interactive **Unity graph explorer** that visualizes mathematical functions in real time. We can tweak the function, density, and resolution while a **shader dynamically changes colors based on position**.
+https://youtu.be/rfPS7lGVAMU
 
-[Watch the project video on YouTube](https://www.youtube.com/watch?v=rfPS7lGVAMU)
+An interactive graph explorer in Unity that draws mathematical functions in real time. You can change the function, its density and its resolution while it runs, and a shader colours every point by its position.

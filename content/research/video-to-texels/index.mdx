@@ -1,0 +1,44 @@
+---
+title: "Video to Texels: Animated 3D Pixel Art from Video"
+publishDate: "13 Nov 2026"
+summary: "Animated 3D pixel art from video."
+type: "Independent"
+cover: ./cover.jpg
+---
+
+import Figure from "@/components/paper/Figure.astro";
+import sourceAndResult from "./source-and-result.jpg";
+
+https://youtu.be/izyGerjA4sE
+
+In 2026 I built video-to-texels, a pipeline that turns videos of a character into animated 3D pixel art. My question was whether two short videos, one with the camera circling the character and one of it performing, are enough to rebuild the character in 3D and replay its motion, while keeping the clean look of pixel art.
+
+<Figure id="fig-source-and-result" number={1} wide src={sourceAndResult} alt="Left, a frame of the source video: a plush prince with a crown and a blue coat among glowing stars and a light trail. Right, the same frame rebuilt as 3D pixel art from small coloured cubes, with the stars and trail as their own texels.">
+  The plush prince. Left: a frame of the input video. Right: the same frame rebuilt from texels.
+</Figure>
+
+## Problem
+
+Pixel art in 3D usually breaks as soon as the camera moves: the pixels slide across the character and shimmer. Building and animating a 3D character by hand also takes a lot of time. I wanted a model that keeps its pixels fixed on the character from any angle, and that gets its shape, colour and motion straight from video.
+
+## How it works
+
+The character is built from texels, small cubes with one palette colour each. The nearest texel owns each screen pixel, so the pixels stay put as the camera orbits. The model is built in layers that can be switched on and off:
+
+- **Shape:** the turnaround video gives a mask and a camera for each frame, and the cubes are fitted to all views at once with differentiable ray marching.
+- **Colour:** each view votes on a palette colour for every texel, and views that disagree count less.
+- **Motion:** a hand-placed skeleton is fitted to every frame of the performance using about 3,000 tracked surface points, and each texel follows its nearest bones.
+- **Light and sound:** stars, dust and trails from the video become their own texel layers, played with the original audio.
+
+## Results
+
+I tested the pipeline on two characters, a plush prince and a green wolf. Both play back as 3D pixel art that can be orbited and zoomed while they move.
+
+| Result | Value |
+| --- | --- |
+| Characters rebuilt | 2, a plush prince and a green wolf |
+| Measuring a character from its videos | about 15 minutes |
+| Building the model | about 4 minutes |
+| Tracked surface points | about 3,000 | There are still limits: depth from a single camera is a guess, the video's lighting is baked into the colours, and short limbs cannot wrap fully around a wide body.
+
+The stable pixel look was inspired by Dylan Ebert's [Texel Splatting](https://dylanebert.com/texel-splatting/). The pipeline uses [CoTracker3](https://github.com/facebookresearch/co-tracker) for point tracking and COLMAP for camera poses.

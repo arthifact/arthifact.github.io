@@ -26,6 +26,8 @@ function resolveTarget(url, pageFile) {
     "https://arthifact.com" + relativePage,
   );
   if (target.origin !== "https://arthifact.com") return undefined;
+  // /sketches/ is published by the separate sketches repository on the same domain
+  if (target.pathname.startsWith("/sketches/")) return undefined;
   const file = path.join(root, decodeURIComponent(target.pathname));
   const candidates = [file, path.join(file, "index.html")];
   return {

@@ -5,43 +5,10 @@ publishDate: "31 August 2024"
 cover: ./cover.png
 ---
 
-## Overview
-A fast-paced 3D infinite runner built in 48 hours for the **2024 GMTK Game Jam**. The game has a unique mechanic where the player’s size dynamically changes with speed.
+https://youtu.be/bkGItTGZy54
 
-[Watch the project video on YouTube](https://www.youtube.com/watch?v=bkGItTGZy54)
+A 3D infinite runner made in 48 hours for the 2024 GMTK Game Jam, where the faster you go the bigger you get. Obstacles are placed with wave function collapse, so every run is different, and the camera adapts to your speed. Made with Godot 4 and Blender with Patrick W. Crawford, Oscar Baechler, Sean and vertenflow. It placed in the top 30% of all entries.
 
-## Background
-Developed to explore procedural level design. The project focused on gameplay loops under time constraints.
+::link{url="https://theduckcow.itch.io/wheelie-big-and-small" label="Play on itch.io"}
 
-## Development
-Built with **Godot 4** and **Blender**, implementing wave function collapse procedural obstacle placement, adaptive camera movement, and a score-based progression system. Additional focus on Memphis-style visuals.
-
-## Features
-- Character size scales dynamically with movement speed  
-- Procedural obstacle placement and level variation  
-- Fast, reactive controls and memphis-style visuals  
-- Designed and completed in 48 hours for the jam  
-
-## Results
-Created a full, replayable game that placed in the top 30% of all submitted entries.
-
-🎮 [Play on itch.io](https://theduckcow.itch.io/wheelie-big-and-small)  
-
-::github{repo="https://github.com/arthifact/godot_4_infinite_runner"}
-
-
-## Tech Stack
-Godot 4 · Blender · GDScript (Python)
-
-## Team
-
-[@arthifact](https://github.com/arthifact) — Gabriel Alonso
-
-[@TheDuckCow](https://github.com/TheDuckCow) - Patrick W. Crawford
-
-[@ogbog](https://github.com/ogbog) — Oscar Baechler
-
-[@robocognito](https://github.com/robocognito) — Sean
-
-[@vertenflow](https://github.com/vertenflow) — vertenflow  
-
+::github{repo="arthifact/godot_4_infinite_runner"}

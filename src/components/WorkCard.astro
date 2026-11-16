@@ -5,7 +5,6 @@ interface Props {
   project: CollectionEntry<"project">;
   index?: number;
   title?: string;
-  description?: string;
   loading?: "eager" | "lazy";
   priority?: boolean;
   imageSizes?: string;
@@ -16,7 +15,6 @@ const {
   project,
   index,
   title = project.data.title,
-  description = project.data.summary,
   loading = "lazy",
   priority = false,
   imageSizes = "(max-width: 470px) 100vw, (max-width: 760px) 50vw, 33vw",
@@ -66,12 +64,11 @@ const Heading = headingLevel === 2 ? "h2" : "h3";
                 : "Project")
         }</span
       ><time datetime={publishDate.toISOString()}
-        >{publishDate.getUTCFullYear()}</time
+        >{publishDate.toLocaleDateString("en-US", { month: "short", year: "numeric", timeZone: "UTC" })}</time
       >
     </p>
     <Heading class="work-title">
       <a href={`/projects/${project.id}/`}>{title}</a>
     </Heading>
-    <p class="work-description">{description}</p>
   </div>
 </article>

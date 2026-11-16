@@ -1,0 +1,48 @@
+---
+title: "Adaptive Particle Splitting for Voronoi Fluid Simulation"
+affiliation: "MIT Summer Geometry Initiative (SGI 2025), mentored by Eitan Grinspun and Jonathan Panuelo of the University of Toronto"
+publishDate: "18 Jul 2025"
+summary: "Under-sampled regions in Voronoi fluids."
+type: "MIT SGI"
+cover: ./cover.png
+---
+
+import Figure from "@/components/paper/Figure.astro";
+import illustration from "./illustration.png";
+import results from "./results.png";
+import conservation from "./conservation.png";
+
+<Figure id="fig-illustration" number={1} wide src={illustration} alt="Two panels of Voronoi cells around a cylinder with flow from left to right. Left, the large cells in the wake behind the cylinder are highlighted in yellow. Right, only those yellow cells are split into four smaller cells, and every other cell is unchanged.">
+  Find the large cells in the under-resolved areas the flow leaves behind, and split only those to add resolution, leaving every other cell as it was.
+</Figure>
+
+In July 2025, during the [MIT Summer Geometry Initiative](https://sgi.mit.edu/sgi-fellows/sgi-2025-fellows/), I spent a week with Professor Eitan Grinspun and PhD student Jonathan Panuelo of the University of Toronto. The project built on a method that couples compressible fluids with thin deformable objects using moving Voronoi cells.
+
+## Problem
+
+In a moving Voronoi simulation, each particle carries a piece of fluid and owns one cell. The flow moves the particles, so some regions, like the wake behind an object at very high speeds, end up with large cells, and there the simulation loses detail. So the goal was to add detail in those regions without disturbing the rest of the flow.
+
+## How it works
+
+Instead of the full simulation, I built a small sandbox in Python to test one idea:
+
+- **Find:** mark the cells that have grown too large.
+- **Subdivide:** split only those cells into smaller ones, sharing the cell's mass, momentum and energy among them.
+- **Leave the rest alone:** every other particle stays as it was, so the change stays local.
+
+## Results
+
+<Figure id="fig-results" number={2} wide src={results} alt="Left, two snapshots of Voronoi cells flowing past a cylinder. Without splitting, a long band of large yellow cells fills the wake. With splitting, the wake has small cells and only a few large ones. Right, a plot of large cells over time: without splitting it climbs to about 55 and stays near 40, with splitting it stays low.">
+  A sandbox where articles flow past a cylinder and the wake thins out. Without splitting, the wake fills with large cells. With splitting, they stay few.
+</Figure>
+
+<Figure id="fig-conservation" number={3} wide src={conservation} alt="Scatter plot over 2,000 frames of the relative change in mass, momentum and energy at each split. All points sit near 1e-16 or at zero.">
+  Over 2,000 frames, every split keeps mass, momentum and energy to rounding error, around 10⁻¹⁶.
+</Figure>
+
+|  |
+| --- |
+| **36 → 6** Cut the large cells left in the wake, without vs with splitting. |
+| **2,000** Ran the sandbox for 2,000 frames, checking every split. |
+| **10⁻¹⁶** Kept mass, momentum and energy at each split, to rounding error. |
+| **Local** Split each large cell into four pieces inside the old one. |

@@ -159,8 +159,11 @@ const hasImages = pages.some((content) => /<img\b/.test(content));
     hasImages && (
       <dialog class="image-viewer" aria-label="Image viewer">
         <div class="image-viewer-stage" />
+        <button type="button" class="image-viewer-nav prev" data-prev aria-label="Previous image">‹</button>
+        <button type="button" class="image-viewer-nav next" data-next aria-label="Next image">›</button>
 
         <div class="image-viewer-bar">
+          <span class="image-viewer-count" data-count></span>
           <button type="button" data-zoom>Zoom in</button>
           <a data-original target="_blank" rel="noopener">Original</a>
           <button type="button" data-close>Close</button>
@@ -201,17 +204,49 @@ const hasImages = pages.some((content) => /<img\b/.test(content));
           for (const frame of document.querySelectorAll(".article-prose :is(.zoomable, a.figure-image)"))
             frame.insertAdjacentHTML("beforeend", '<span class="zoom-hint" aria-hidden="true"></span>');
 
+          // The viewer steps through the images around the one you opened: the
+          // rest of its gallery, or every image on the page.
+          const prevButton = viewer.querySelector("[data-prev]");
+          const nextButton = viewer.querySelector("[data-next]");
+          const counter = viewer.querySelector("[data-count]");
+          let group = [];
+          let at = 0;
+          const viewable = (root) =>
+            [...root.querySelectorAll(".zoomable img, a.figure-image img")];
+          const show = (i) => {
+            at = Math.max(0, Math.min(group.length - 1, i));
+            const img = group[at];
+            const link = img.closest("a.figure-image");
+            image.src = link ? link.href : img.currentSrc || img.src;
+            image.alt = img.alt;
+            original.href = image.src;
+            zoom(false);
+            const many = group.length > 1;
+            prevButton.hidden = nextButton.hidden = counter.hidden = !many;
+            prevButton.disabled = at === 0;
+            nextButton.disabled = at === group.length - 1;
+            counter.textContent = `${at + 1} / ${group.length}`;
+            // keep the gallery on the same image, so closing lands where you are
+            const track = img.closest(".gallery-track");
+            if (track) track.scrollTo({ left: [...track.children].findIndex((c) => c.contains(img)) * track.clientWidth });
+          };
+
           document.addEventListener("click", (event) => {
             if (!event.target.closest(".article-prose")) return;
             const link = event.target.closest("a.figure-image");
             const img = (link || event.target.closest(".zoomable"))?.querySelector("img");
             if (!img) return;
             event.preventDefault();
-            image.src = link ? link.href : img.currentSrc || img.src;
-            image.alt = img.alt;
-            original.href = image.src;
-            zoom(false);
+            const gallery = img.closest(".gallery");
+            group = viewable(gallery || document.querySelector(".article-prose"));
+            show(group.indexOf(img));
             viewer.showModal();
+          });
+          prevButton.addEventListener("click", () => show(at - 1));
+          nextButton.addEventListener("click", () => show(at + 1));
+          viewer.addEventListener("keydown", (event) => {
+            if (event.key === "ArrowLeft") show(at - 1);
+            if (event.key === "ArrowRight") show(at + 1);
           });
           image.addEventListener("click", (event) => {
             if (!dragged) zoom(!viewer.classList.contains("zoomed"), event.clientX, event.clientY);
@@ -236,6 +271,47 @@ const hasImages = pages.some((content) => /<img\b/.test(content));
           addEventListener("pointerup", () => {
             drag = null;
           });
+
+          // Galleries: arrows, dots and a counter on top of the scroll strip.
+          for (const gallery of document.querySelectorAll(".article-prose .gallery")) {
+            const track = gallery.querySelector(".gallery-track");
+            const slides = [...track.children];
+            if (slides.length < 2) continue;
+            const button = (label, text, cls) => {
+              const b = document.createElement("button");
+              b.type = "button";
+              b.className = cls;
+              b.setAttribute("aria-label", label);
+              b.textContent = text;
+              return b;
+            };
+            const prev = button("Previous image", "‹", "gallery-arrow prev");
+            const next = button("Next image", "›", "gallery-arrow next");
+            const count = document.createElement("span");
+            count.className = "gallery-count";
+            const dots = document.createElement("div");
+            dots.className = "gallery-dots";
+            const go = (i) => track.scrollTo({ left: i * track.clientWidth, behavior: "smooth" });
+            slides.forEach((_, i) => {
+              const dot = button(`Image ${i + 1}`, "", "");
+              dot.addEventListener("click", () => go(i));
+              dots.append(dot);
+            });
+            gallery.append(prev, next, count);
+            gallery.after(dots);
+            const current = () => Math.round(track.scrollLeft / track.clientWidth);
+            const show = () => {
+              const i = current();
+              prev.disabled = i === 0;
+              next.disabled = i === slides.length - 1;
+              count.textContent = `${i + 1} / ${slides.length}`;
+              [...dots.children].forEach((dot, j) => dot.setAttribute("aria-current", String(i === j)));
+            };
+            prev.addEventListener("click", () => go(current() - 1));
+            next.addEventListener("click", () => go(current() + 1));
+            track.addEventListener("scroll", show, { passive: true });
+            show();
+          }
         })();
       </script>
     )

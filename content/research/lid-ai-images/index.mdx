@@ -1,0 +1,53 @@
+---
+title: "Local Intrinsic Dimensionality of Real and AI-Generated Images"
+affiliation: "MIT Summer Geometry Initiative (SGI 2025), mentored by Ankita Shukla of the University of Nevada, Reno"
+publishDate: "15 Aug 2025"
+summary: "Telling real from AI images by geometry."
+type: "MIT SGI"
+cover: ./cover.png
+---
+
+import Figure from "@/components/paper/Figure.astro";
+import classes from "./classes.png";
+import estimator from "./estimator.png";
+import gap from "./gap.png";
+
+https://youtu.be/nJzSpOieOSU
+
+In August 2025, during the [MIT Summer Geometry Initiative](https://sgi.mit.edu/sgi-fellows/sgi-2025-fellows/), I spent two weeks with Ankita Shukla of the University of Nevada, Reno. The project explored the geometry and topology of AI-generated images.
+
+<Figure id="fig-classes" number={1} wide src={classes} alt="Grouped bar chart of mean local intrinsic dimensionality, with standard deviations, for the ten CIFAR-10 classes. Real images, in blue, are higher than AI-generated images, in red, in every class except deer, where generated images are slightly higher.">
+  Mean LID for each CIFAR-10 class, with standard deviations: real images sit higher than generated ones in every class except deer.
+</Figure>
+
+## Problem
+
+Generated images are getting hard to tell apart from real ones. Instead of looking at the pixels, we looked at where each image lands inside a neural network's feature space, where real and generated images might be spread out differently. So the goal was to test if a single geometric measure could tell them apart.
+
+## How it works
+
+My hypothesis was that real images sit in richer neighbourhoods than generated ones. To test it:
+
+- **Features:** 100,000 CIFAR-10-sized images, half real and half generated, passed through a ResNet-18.
+- **LID:** for each image, local intrinsic dimensionality estimates how many directions the data really spreads in around it, from the distances to its nearest neighbours.
+- **Classifier:** one threshold on LID, with the number of neighbours k and the cutoff tuned together.
+
+<Figure id="fig-estimator" number={2} wide src={estimator} alt="Three overlapping histograms of estimated LID for points on a curve, a sheet and a blob placed in 10-dimensional space. Their medians are about 1, 2 and 4, matching the number of directions each one really spreads in.">
+  The LID estimator on data with a known answer: points on a curve, a sheet and a blob in 10 dimensions come out near 1, 2 and 4.
+</Figure>
+
+## Results
+
+<Figure id="fig-gap" number={3} wide src={gap} alt="Horizontal bar chart of mean LID of real minus generated images per CIFAR-10 class, sorted. Bird has the largest gap at +7.82, then dog and ship. Deer is the only negative bar, at -0.70.">
+  How much higher the mean LID of real images is in each class. Deer is the only class where generated images come out higher.
+</Figure>
+
+|  |
+| --- |
+| **100,000** Analyzed real and AI-generated images, half of each, through a ResNet-18. |
+| **36.18 vs 32.48** Measured a higher mean LID for real images than for generated ones. |
+| **9 of 10** Found real images higher in every class except deer. |
+| **61.5%** Reached this held-out accuracy with a single LID threshold, k = 640 and the cutoff picked on a training split. |
+| **88.8%** Compared with logistic regression on the full features, for reference. |
+
+This project stayed a test of one measure: LID carries a real signal, but on its own it is a weak detector.
