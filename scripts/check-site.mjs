@@ -13,7 +13,12 @@ function filesIn(dir) {
     return entry.isDirectory() ? filesIn(full) : [full];
   });
 }
-const pages = filesIn(root).filter((file) => file.endsWith(".html"));
+// Astro writes small meta-refresh pages for the redirects in astro.config.ts; they are not real pages.
+const pages = filesIn(root).filter(
+  (file) =>
+    file.endsWith(".html") &&
+    !/<meta http-equiv="refresh"/.test(fs.readFileSync(file, "utf8")),
+);
 const errors = [];
 function check(condition, message) {
   if (!condition) errors.push(message);
@@ -26,8 +31,8 @@ function resolveTarget(url, pageFile) {
     "https://arthifact.com" + relativePage,
   );
   if (target.origin !== "https://arthifact.com") return undefined;
-  // /sketches/ is published by the separate sketches repository on the same domain
-  if (target.pathname.startsWith("/sketches/")) return undefined;
+  // /sketches/ and /slidekick/ are published by their own repositories on the same domain
+  if (/^\/(sketches|slidekick)\//.test(target.pathname)) return undefined;
   const file = path.join(root, decodeURIComponent(target.pathname));
   const candidates = [file, path.join(file, "index.html")];
   return {
@@ -131,14 +136,9 @@ for (const page of mainPages) {
   );
 }
 const home = fs.readFileSync(path.join(root, "index.html"), "utf8");
-check(
-  (home.match(/class="work-card"/g) || []).length === 6,
-  "Homepage must show six selected works.",
-);
-check(
-  home.includes("/projects/article-exploring-dmesh/"),
-  "Homepage must include the DMesh++ research essay.",
-);
+for (const section of ["/research/", "/projects/", "/art/"]) {
+  check(home.includes(`href="${section}"`), `Homepage must link to ${section}`);
+}
 const feed = fs.readFileSync(path.join(root, "rss.xml"), "utf8");
 check(
   feed.includes("DMesh++") && feed.includes("Gaming to Better the Earth"),
