@@ -1,7 +1,7 @@
 ---
 title: "Adaptive Gaussian Parameterization for Multiscale Full-Waveform Inversion"
 authors: ["Gabriel I. Alonso", "Julien Chaput"]
-affiliation: "The University of Texas at El Paso"
+affiliation: "The University of Texas at El Paso, Department of Earth, Environmental and Resource Sciences"
 publishDate: "1 Aug 2026"
 summary: "Simple rules choose the smooth seismic model."
 type: "UTEP"
@@ -9,42 +9,58 @@ cover: ./cover.png
 ---
 
 import Figure from "@/components/paper/Figure.astro";
-import growth from "./growth.gif?url";
 import errors from "./errors.png";
+import survey from "./survey.png";
+import rules from "./rules.png";
+import comparison from "./comparison.png";
 
-<Figure id="fig-growth" number={1} src={growth} width={640} height={690} maxWidth={520} alt="An animation cycling through four velocity maps of the Overthrust model: the flat starting guess, the smooth adaptive Gaussian model at 9 Hz with each Gaussian drawn as a white ellipse, the final model after pixel refinement at 30 Hz, and the true model.">
-  Overthrust, from the starting guess to the Gaussian model at 9 Hz (each Gaussian drawn as an ellipse), the final model at 30 Hz, and the true model.
-</Figure>
+https://youtu.be/wFhWIzwr8EY
 
-From March to August 2026 I worked with Julien Chaput at the University of Texas at El Paso on a research project in full-waveform inversion (FWI), a way to image the ground from seismic recordings. My question was whether a few simple rules from statistics, signal processing and wave physics could decide how the seismic model is built, instead of a fixed grid.
+From March to August 2026 I worked with Professor Julien Chaput at the University of Texas at El Paso on a research project in full-waveform inversion (FWI), a way to image the ground from seismic recordings. My question was whether a few simple rules could decide how the seismic model is built, instead of a fixed grid.
 
 ## Problem
 
 FWI sends sound waves into the ground, records the echoes at the surface, and searches for the velocity map whose simulated echoes match them. From a poor starting guess it lines up the wrong wave cycles and gets stuck. The usual fix is to start at low frequencies and build a smooth model first, but that smooth model is normally a pixel grid or a fixed layout of shapes, the same everywhere whether the geology needs it or not.
 
+<Figure id="fig-survey" number={1} wide src={survey} alt="Left, the true Marmousi velocity model with five shot positions marked as stars along the surface and a receiver at every surface cell. Right, the recording of the middle shot: a bright V-shaped direct wave with fainter reflections arriving later underneath.">
+  The setup on Marmousi: five shots (stars) and a receiver at every surface cell. Right: what the surface records from the middle shot.
+</Figure>
+
 ## How it works
 
-I build the smooth model out of Gaussians, smooth bumps described by six numbers each. The model starts empty, and every ten steps a few rules decide what to add and what to remove:
+I build the smooth model out of Gaussians, soft tilted ellipses added on top of a linear background, where velocity grows steadily with depth. Each one is described by:
 
-- **Where:** a new Gaussian goes where the gradient asks for a change.
-- **Shape:** it is stretched and tilted to follow that area, so it can follow a dipping layer.
-- **Size:** it is never smaller than the data can see at that frequency.
-- **Keep or remove:** it stays only if it improves the fit by more than a price set by the noise level.
+- **Center:** its depth and horizontal position.
+- **Two widths:** one along the ellipse and one across it, so it can be long and thin or round.
+- **Angle:** how much it is tilted.
+- **Amplitude:** how much faster or slower the waves travel inside it.
 
-After 9 Hz the smooth model is frozen, and ordinary pixel inversion adds detail up to 30 Hz.
+The model starts with no Gaussians. Every tenth step is a growth round where these rules decide what to add and what to remove. In the steps in between, the Adam optimizer updates all six numbers of every Gaussian at once.
+
+- **Where:** the gradient is split into connected patches of the same sign, after cutting weak links below 1% of each patch's peak. Each patch is one candidate. A Gauss-Newton estimate, using how well each area is illuminated by the shots, predicts how much each candidate would lower the misfit, and the best six are tried.
+- **Shape:** the center is the gradient-weighted center of the patch, and the two widths and the angle come from the patch's weighted covariance. A patch that runs along a dipping layer becomes a Gaussian tilted along it.
+
+<Figure id="fig-rules" number={2} wide src={rules} alt="Four panels from one growth round at 6 Hz on Marmousi. (a) The gradient, strongest just below the surface. (b) The gradient split into 18 coloured same-sign patches. (c) One ellipse per patch over the faded gradient, with the six best candidates in black. (d) The velocity model after the round, with existing Gaussians in white and the four newly kept ones in red.">
+  One growth round at 6 Hz on Marmousi: (a) the gradient, (b) its same-sign patches, (c) one Gaussian per patch, with the six that are tried in black, and (d) the four that paid their price and stayed.
+</Figure>
+
+- **Amplitude:** a first try at 5% of the local speed, in the downhill direction. A parabola through the measured losses then picks the amplitude, capped at 30% of the local speed.
+- **Size:** no width is ever smaller than a quarter of the local wavelength, the smallest detail the data can resolve at that frequency. The floor is checked when a Gaussian is born and after every Adam step.
+- **Keep or remove:** a new Gaussian stays only if it lowers the misfit by more than a price from the Bayesian information criterion: six parameters times the log of the number of effective data samples, scaled by the noise level. Gaussians that fade below 5 m/s are removed if the misfit rises by less than what they cost. Each band keeps the model with the lowest misfit plus price.
+
+The Gaussians are fitted at 6 Hz and then 9 Hz. After that the smooth model is frozen, and ordinary pixel inversion adds detail at 13, 20 and 30 Hz.
 
 ## Results
 
-I tested the method on four standard models (Marmousi, Overthrust, BP 2004 and SEAM) against a fixed grid of Gaussians and three pixel methods. The pixel methods stayed stuck near the starting guess. The adaptive model gave the best smooth model in most cases, even when the fixed grid got the same amount of computing, with the clearest win on Overthrust. On SEAM the fixed grid did better.
+On Marmousi, every method gets the same data and the same final pixel stages, so only the smooth model differs. The adaptive Gaussians end with the lowest error and recover the fast layer at the lower left most clearly.
 
-| Final error (m/s) | Starting guess | Best pixel method | Fixed grid | Adaptive |
-| --- | ---: | ---: | ---: | ---: |
-| Marmousi | 862 | 618 | 537 | **519** |
-| Overthrust | 2,369 | 2,095 | 758 | **314** |
-| BP 2004 | 1,530 | 1,141 | 446 | **437** |
-| SEAM | 1,559 | 1,659 | **400** | 845 |
+<Figure id="fig-comparison" number={3} wide src={comparison} alt="Five final velocity maps of Marmousi at 30 Hz with their errors: the starting ramp at 862 m/s, the best pixel method at 612 m/s, the fixed grid of Gaussians at 539 m/s, the adaptive Gaussians at 470 m/s, and the true model. The adaptive result recovers the bright high-velocity layer at the lower left most clearly.">
+  Final models on Marmousi, with one noise pattern. The best pixel method here is smoothed pixels.
+</Figure>
 
-<Figure id="fig-errors" number={2} src={errors} alt="Two grouped bar charts of velocity error for the four models, after the smooth stage and after the final stage. Bars show the best pixel method, the fixed grid and the adaptive Gaussians; a black line marks the starting error.">
+I then tested the method on four standard models (Marmousi, Overthrust, BP 2004 and SEAM) against a fixed grid of Gaussians and three pixel methods. The pixel methods stayed stuck near the starting guess. The adaptive model gave the best smooth model in most cases, even when the fixed grid got the same amount of computing, with the clearest win on Overthrust. On SEAM the fixed grid did better.
+
+<Figure id="fig-errors" number={4} src={errors} alt="Two grouped bar charts of velocity error for the four models, after the smooth stage and after the final stage. Bars show the best pixel method, the fixed grid and the adaptive Gaussians; a black line marks the starting error.">
   Velocity error for each model, averaged over three noise patterns. Lower is better; the black line is the starting guess.
 </Figure>
 
