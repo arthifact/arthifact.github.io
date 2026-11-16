@@ -60,7 +60,7 @@ const project = defineCollection({
 });
 
 const page = defineCollection({
-  loader: glob({ base: "./content", pattern: "{home,about,cv}/index.md" }),
+  loader: glob({ base: "./content", pattern: "{home,cv}/index.md" }),
   schema: z.object({
     title: z.string().max(180),
     description: z.string().default(content.site.description),

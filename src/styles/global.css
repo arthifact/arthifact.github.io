@@ -483,6 +483,13 @@
 :is(.footer-links, .article-bottom, .article-topline) a:is(:hover, :focus-visible) {
   background-size: 100% 1px;
 }
+/* Home links to Research, Projects and Art: accent colored so they read as places to go. */
+.about-text p a[href^="/"] {
+  color: var(--color-link);
+  font-weight: 600;
+  white-space: nowrap;
+  text-decoration-color: color-mix(in srgb, currentColor 55%, transparent);
+}
 @media (prefers-reduced-motion: reduce) {
   :is(.article-prose, .about-text) :is(p, li) a,
     :is(.footer-links, .article-bottom, .article-topline) a {

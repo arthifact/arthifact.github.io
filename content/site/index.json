@@ -31,14 +31,6 @@
     {
       "path": "/art/",
       "title": "Art"
-    },
-    {
-      "path": "/blog/",
-      "title": "Blog"
-    },
-    {
-      "path": "/about/",
-      "title": "About"
     }
   ],
   "socials": [
@@ -91,10 +83,6 @@
     "art": {
       "title": "Art",
       "description": "3D art and animation by Gabriel I. Alonso, also known as Arthifact."
-    },
-    "blog": {
-      "title": "Blog",
-      "description": "Essays and working notes on geometry, computation, and creative work by Gabriel I. Alonso."
     }
   }
 }

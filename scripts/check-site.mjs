@@ -104,8 +104,6 @@ const mainPages = [
   "research/index.html",
   "projects/index.html",
   "art/index.html",
-  "blog/index.html",
-  "about/index.html",
 ];
 for (const page of mainPages) {
   const html = fs.readFileSync(path.join(root, page), "utf8");

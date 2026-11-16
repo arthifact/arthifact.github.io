@@ -7,8 +7,8 @@ export function rehypeArticleLinks() {
     target: "_blank",
   });
   return (tree: Root, file: { path: string }) => {
-    // About previously used same-tab links; keep that behavior after moving its copy.
-    if (file.path.replaceAll("\\", "/").endsWith("/content/about/index.md"))
+    // Home links stay in the same tab.
+    if (file.path.replaceAll("\\", "/").endsWith("/content/home/index.md"))
       return;
     return transform(tree);
   };

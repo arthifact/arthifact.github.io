@@ -35,6 +35,11 @@ export default defineConfig({
     mdx(),
     robotsTxt(),
   ],
+  // the blog and about pages were folded into the home page
+  redirects: {
+    "/about": "/",
+    "/blog": "/",
+  },
   markdown: {
     processor: unified({
       rehypePlugins: [
