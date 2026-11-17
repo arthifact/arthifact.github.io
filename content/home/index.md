@@ -8,7 +8,7 @@ cvTitle: Curriculum vitae
 socialTitle: Find me elsewhere
 ---
 
-Hi! I’m Isaac, I’m a computer scientist, I graduated from The University of Texas at El Paso (UTEP) in December 2025. Right now I’m working on a few research projects at UTEP while I apply to grad school.
+Hi! I’m Isaac, I’m a computer scientist, I graduated from The University of Texas at El Paso (UTEP) in December 2025.
 
 I’ve always loved movies, and the way motion can tell a story. That’s what pulled me into computer graphics: animation, games, procedural worlds, anything that moves or grows from a few simple rules. Nature does this better than anyone, which is why I love it so much. My dream is to make games and tools that help people build better digital worlds.
 
